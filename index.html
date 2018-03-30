@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>NCAR Archives Search</title>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="base-script.js"></script>
+    <script src="aspace-script.js"></script>
+    <script src="opensky-model.js"></script>
+    <script src="mods-model.js"></script>
+    <script src="opensky-script.js"></script>
+
+    <!--    <script src="model.js"></script>
+        <script src="mods-model.js"></script>-->
+
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+</head>
+<body>
+<div id="page-wrapper">
+    <h1 class="page-title">NCAR Archives Search</h1>
+    <pre id="token" style="display:none"></pre>
+
+    <div id="search-form-wrapper">
+        <form id="search-form">
+            <input type="text" id="query" value="climate" maxlength="200"/>
+            <button type="button" id="search-button">search</button>
+        </form>
+    </div>
+
+
+    <div id="aspace-wrapper" class="repo-wrapper">
+        <div id="aspace-see-all-button" class="see-all-button"></div>
+        <h3>Archival Collections</h3>
+        <ol id="aspace-results" class="results-list"></ol>
+    </div>
+    <div id="opensky-wrapper" class="repo-wrapper">
+        <div id="opensky-see-all-button" class="see-all-button"></div>
+        <h3>Digital Collections</h3>
+        <ol id="opensky-results" class="results-list"></ol>
+    </div>
+
+</div> <!-- page-wrapper-->
+</body>
+<script>
+    $(function () {
+
+        var ASPACE = new ApaceController();
+        var OPENSKY = new OpenSkyController();
+
+        $('#search-button')
+            .button()
+            .click(function (event) {
+                search();
+                return false;
+            })
+
+        $('#search-form')
+                .submit(function (event) {
+                    search();
+                    return false;
+                })
+
+        function search () {
+            $('.see-all-button').hide();
+            ASPACE.doSearch();
+            OPENSKY.search();
+        }
+
+        setTimeout (search, 500);
+
+    })
+
+
+</script>
