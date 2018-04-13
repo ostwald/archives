@@ -230,11 +230,26 @@ var OSWSModsResult = Class.extend({
         return "";
     },
 
-    /* NOTE: there can be two titles (one is alt). This is not currently
-    handled */
     getTitle() {
         // log ('getTitle: ' + getContent(this.mods.titleInfo.title));
-        return this.getModsContent('titleInfo.title');
+        var title = this.getModsContent('titleInfo.title');
+
+        // sometimes there are two titles - in this case we look for the
+        // non-alternate
+        if (!title) {
+            log ("WHAT THE????")
+            var titles = this.mods.titleInfo;
+            for (var i=0;i<titles.length;i++) {
+                var candidate = titles[i]
+                if (candidate.type == 'alternate') {
+                    log ("skipping alternate")
+                }
+                else {
+                    title = candidate.title;
+                }
+            }
+        }
+        return title;
     },
 
     render: function () {

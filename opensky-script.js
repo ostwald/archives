@@ -8,6 +8,7 @@ var OpenSkyController = Class.extend ({
 
     init: function() {
         this.baseurl = 'https://osws.ucar.edu'
+        // this.baseurl = 'https://oswscl.dls.ucar.edu'
         this.$result_list = $('#opensky-result-list')
         this.$see_all_button = $('#opensky-see-all-button')
     },

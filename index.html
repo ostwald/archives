@@ -27,18 +27,18 @@
 
     <div id="search-form-wrapper">
         <form id="search-form">
-            <input type="text" id="query" value="climate" maxlength="200"/>
+            <input type="text" id="query" value="" placeholder="e.g., Tamex" maxlength="200"/>
             <button type="button" id="search-button">search</button>
         </form>
     </div>
 
 
-    <div id="aspace-wrapper" class="repo-wrapper">
+    <div id="aspace-wrapper" class="repo-wrapper" style="display:none">
         <div id="aspace-see-all-button" class="see-all-button"></div>
         <h3>Archival Collections</h3>
         <ol id="aspace-results" class="results-list"></ol>
     </div>
-    <div id="opensky-wrapper" class="repo-wrapper">
+    <div id="opensky-wrapper" class="repo-wrapper" style="display:none">
         <div id="opensky-see-all-button" class="see-all-button"></div>
         <h3>Digital Collections</h3>
         <ol id="opensky-results" class="results-list"></ol>
@@ -67,11 +67,13 @@
 
         function search () {
             $('.see-all-button').hide();
+            $('.repo-wrapper').show();
             ASPACE.doSearch();
             OPENSKY.search();
+
         }
 
-        setTimeout (search, 500);
+        // setTimeout (search, 500);
 
     })
 

@@ -3,6 +3,7 @@ var ApaceController = Class.extend ({
     init:function () {
         this.TOKEN = null;
         this.baseurl = 'http://localhost:4567';
+        // this.baseurl = 'http://aspace.ucar.edu:8089/'; // needs to be setup for cors
         this.get_token()
     },
 
@@ -74,7 +75,7 @@ var ApaceController = Class.extend ({
         var this_page = data.this_page;
         var last_page = data.last_page;
 
-        log ("facets: " + stringify(data.facets))
+        // log ("facets: " + stringify(data.facets))
 
         if (!results.length) {
             log("NO results")
@@ -82,7 +83,8 @@ var ApaceController = Class.extend ({
                 .html('No results found')
                 .css({fontStyle: 'italic'}))
         } else {
-            var aspace_url = 'http://localhost:3001/search?op%5B%5D=&q%5B%5D=' + q;
+            // var aspace_url = 'http://localhost:3001/search?op%5B%5D=&q%5B%5D=' + q;
+            var aspace_url = 'http://128.117.56.200:3001/search?op%5B%5D=&q%5B%5D=' + q;
             log ("ASSPACE URL: " + aspace_url)
             $('#aspace-see-all-button')
                 .html ($t('a')
@@ -109,7 +111,8 @@ var ApaceController = Class.extend ({
                     .html(result.title)
                     .append($t('a')
                         .addClass ('repo-link')
-                        .prop ('href', 'https://aspace.archives.ucar.edu' + result.uri)
+                        // .prop ('href', 'https://aspace.archives.ucar.edu' + result.uri)
+                        .prop ('href', 'http://128.117.56.200:3001' + result.uri)
                         .attr ('target', 'aspace')
                         .html($t('span')
                             .addClass ('ui-icon ui-icon-extlink'))))
@@ -126,11 +129,11 @@ var ApaceController = Class.extend ({
                     .addClass('result-attr')
                     .html('resource type: ' + result.resource_type))
             }
-            if (result.jsonmodel_type) {
-                $attrs.append($t('div')
-                    .addClass('result-attr')
-                    .html('jsonmodel type: ' + result.jsonmodel_type))
-            }
+            // if (result.jsonmodel_type) {
+            //     $attrs.append($t('div')
+            //         .addClass('result-attr')
+            //         .html('jsonmodel type: ' + result.jsonmodel_type))
+            // }
 
             $result_dom.append ($attrs);
 
