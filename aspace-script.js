@@ -2,7 +2,8 @@ var ApaceController = Class.extend ({
 
     init:function () {
         this.TOKEN = null;
-        this.baseurl = 'http://localhost:4567';
+        //this.baseurl = 'http://localhost:4567';
+        this.baseurl = 'http://oswscl.dls.ucar.edu:7089';
         // this.baseurl = 'http://aspace.ucar.edu:8089/'; // needs to be setup for cors
         this.get_token()
     },
@@ -91,8 +92,8 @@ var ApaceController = Class.extend ({
                     // .prop('href', 'https://aspace.archives.ucar.edu/search?utf8=%E2%9C%93&q=' + q)
                     .prop('href', aspace_url)
                     .prop('target', 'aspace')
-                    .html("See all " + total_hits + " results"))
-                    // .html("See all results"))
+                    // .html("See all " + total_hits + " results"))
+                    .html("See all results"))
                 .show()
                 .button()
         }

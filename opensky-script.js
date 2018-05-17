@@ -100,7 +100,7 @@ var OpenSkyController = Class.extend ({
             $('#opensky-see-all-button')
                 .html ($t('a')
                     .prop('href', opensky_url)
-                    .attr('target', 'opensky')
+                    .prop('target', 'opensky')
                     // .html("See all " + total_hits + " results"))
                     .html("See all results"))
                 .show()
