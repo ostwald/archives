@@ -1,15 +1,14 @@
 var ApaceController = Class.extend ({
 
-    init:function () {
+    init:function (api_baseurl, ui_baseurl) {
         this.TOKEN = null;
-        //this.baseurl = 'http://localhost:4567';
-        this.baseurl = 'http://oswscl.dls.ucar.edu:7089';
-        // this.baseurl = 'http://aspace.ucar.edu:8089/'; // needs to be setup for cors
+        this.api_baseurl = api_baseurl;
+        this.ui_baseurl = ui_baseurl;
         this.get_token()
     },
 
     get_token: function (callback) {
-        var url = this.baseurl + '/users/admin/login'
+        var url = this.api_baseurl + '/users/admin/login'
         var data = {password:'admin'}
         var self = this;
         $.post(url, data, function (resp) {
@@ -27,7 +26,7 @@ var ApaceController = Class.extend ({
         log ("Aspace SEARCH")
         var q = $('#query').val().trim();
         // log (' - q: ' + q);
-        var url = this.baseurl + '/repositories/2/search'
+        var url = this.api_baseurl + '/repositories/2/search'
 
         /* NOTE: all the "keyword" queries below yield same results */
         var params = {
@@ -54,8 +53,6 @@ var ApaceController = Class.extend ({
             headers: {'X-ArchivesSpace-Session': self.TOKEN}
         }).done (function (resp) {
             log ("ASPACE SEARCH RESULTS returned")
-//                log (stringify(resp))
-//                var resp_json = $.parseJSON(resp)
             self.render_search_results(q, resp)
         })
     },
@@ -76,32 +73,26 @@ var ApaceController = Class.extend ({
         var this_page = data.this_page;
         var last_page = data.last_page;
 
-        // log ("facets: " + stringify(data.facets))
-
         if (!results.length) {
             log("NO results")
             $target.append($t('div')
                 .html('No results found')
                 .css({fontStyle: 'italic'}))
         } else {
-            // var aspace_url = 'http://localhost:3001/search?op%5B%5D=&q%5B%5D=' + q;
-            var aspace_url = 'http://128.117.56.200:3001/search?op%5B%5D=&q%5B%5D=' + q;
-            log ("ASSPACE URL: " + aspace_url)
+
+            var search_url = this.api_baseurl + '/search?op%5B%5D=&q%5B%5D=' + q;
+
+            log ("ASSPACE URL!: " + search_url)
             $('#aspace-see-all-button')
                 .html ($t('a')
-                    // .prop('href', 'https://aspace.archives.ucar.edu/search?utf8=%E2%9C%93&q=' + q)
-                    .prop('href', aspace_url)
+                    .prop('href', search_url)
                     .prop('target', 'aspace')
                     // .html("See all " + total_hits + " results"))
                     .html("See all results"))
                 .show()
                 .button()
         }
-
-        // log ("results: " + stringify(results))
-
-
-
+        var self = this;
         $(results).each (function (i, result) {
 
             $result_dom = $t('li').addClass('.result')
@@ -112,8 +103,7 @@ var ApaceController = Class.extend ({
                     .html(result.title)
                     .append($t('a')
                         .addClass ('repo-link')
-                        // .prop ('href', 'https://aspace.archives.ucar.edu' + result.uri)
-                        .prop ('href', 'http://128.117.56.200:3001' + result.uri)
+                        .prop ('href', self.ui_baseurl + result.uri)
                         .attr ('target', 'aspace')
                         .html($t('span')
                             .addClass ('ui-icon ui-icon-extlink'))))
@@ -130,11 +120,6 @@ var ApaceController = Class.extend ({
                     .addClass('result-attr')
                     .html('resource type: ' + result.resource_type))
             }
-            // if (result.jsonmodel_type) {
-            //     $attrs.append($t('div')
-            //         .addClass('result-attr')
-            //         .html('jsonmodel type: ' + result.jsonmodel_type))
-            // }
 
             $result_dom.append ($attrs);
 

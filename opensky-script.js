@@ -1,4 +1,4 @@
-var OPENSKY_BASE_URL = 'https://osstage2.ucar.edu';
+
 
 var archives_keys = ['asr','atd','barbados','comm','fgge','gate','gtpr','guides','hao','info','ipcc','jkuettner','lie','mesalab','natlballoonfac','nhre','raf','scdnewsletter','srm','staff','twerle','ucar','ucarbd','unid','unoh','unpc','vinlally','wcias','wor','wwashington']
 var non_archives_keys = ['articles','books','cimg','conference','dataviz','dcerc','jkuettner','kuettner','manuals','manuscript','reports','siparcs','soars','technotes','usclivar']
@@ -6,9 +6,9 @@ var non_archives_keys = ['articles','books','cimg','conference','dataviz','dcerc
 
 var OpenSkyController = Class.extend ({
 
-    init: function() {
-        this.baseurl = 'https://osws.ucar.edu'
-        // this.baseurl = 'https://oswscl.dls.ucar.edu'
+    init: function(api_baseurl, ui_baseurl) {
+        this.api_baseurl = api_baseurl;
+        this.ui_baseurl = ui_baseurl;
         this.$result_list = $('#opensky-result-list')
         this.$see_all_button = $('#opensky-see-all-button')
     },
@@ -33,7 +33,7 @@ var OpenSkyController = Class.extend ({
 
         // query += ' NOT mods_extension_collectionKey_ms:articles NOT mods_extension_collectionKey_ms:books'
 
-        var url = this.baseurl + '/service/search/v1'
+        var url = this.api_baseurl + '/service/search/v1'
         var params = {
             // q: 'mods_titleInfo_title_mt:"' + q + '"',
             q: query,
@@ -66,7 +66,7 @@ var OpenSkyController = Class.extend ({
     get_opensky_query: function (q) {
         // https://opensky.ucar.edu/islandora/search/warren%20washington?type=dismax&collection=opensky%3Aarchives
 
-        var os_query =  OPENSKY_BASE_URL + '/islandora/search/' + encodeURIComponent(q) + '?type=dismax&collection=opensky%3Aarchives';
+        var os_query =  this.ui_baseurl + '/islandora/search/' + encodeURIComponent(q) + '?type=dismax&collection=opensky%3Aarchives';
         var splits = os_query.split('%22');
         if (splits.length > 2) {
             os_query = splits[0] + '%28' + splits[1] + '%29' + splits[2];
@@ -112,45 +112,6 @@ var OpenSkyController = Class.extend ({
             var result = new OSWSModsResult (result_data)
             $target.append(result.render());
 
-        })
-    },
-
-    render_search_resultsOLD:function (data) {
-        log ("render_search_results!")
-
-        var $target = $('#opensky-results').html('');
-
-
-        var results = data.OpenSkyWebService.Search.results.result;
-        var total_hits = data.OpenSkyWebService.Search.resultInfo.response.numFound;
-
-        log (total_hits + " hits found")
-        log (results.length + " results returned")
-
-        if (!results.length) {
-            log("NO results")
-            $target.append($t('div')
-                .html('No results found')
-                .css({fontStyle: 'italic'}))
-        } else {
-            $target.append ($t('div')
-                .addClass('search-info')
-                .css({textAlign:'right', width:'100%'})
-                .html("See all " + total_hits + " records found"));
-        }
-
-
-        $(results).each(function (i, result) {
-            $target
-                .append($t('div')
-                    .addClass('title')
-                    .html(result.title)
-                    .append($t('a')
-                        .addClass ('aspace-link')
-                        .prop ('href', 'https://aspace.archives.ucar.edu' + result.uri)
-                        .attr ('target', 'aspace')
-                        .html($t('span')
-                            .addClass ('ui-icon ui-icon-extlink'))))
         })
     }
 

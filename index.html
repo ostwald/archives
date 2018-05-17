@@ -48,9 +48,13 @@
 </body>
 <script>
     $(function () {
+        var ASPACE_API = 'http://oswscl.dls.ucar.edu:7089';
+        var ASPACE_UI = 'http://oswscl.dls.ucar.edu:7081';
+        var ASPACE = new ApaceController(ASPACE_API, ASPACE_UI);
 
-        var ASPACE = new ApaceController();
-        var OPENSKY = new OpenSkyController();
+        var OPENSKY_API = 'https://osws.ucar.edu';
+        var OPENSKY_UI = 'https://osstage2.ucar.edu';
+        var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
 
         $('#search-button')
             .button()
@@ -73,7 +77,8 @@
 
         }
 
-        // setTimeout (search, 500);
+        $('#query').val('ocean');
+        setTimeout (search, 500);
 
     })
 
