@@ -53,6 +53,7 @@ var ApaceController = Class.extend ({
             headers: {'X-ArchivesSpace-Session': self.TOKEN}
         }).done (function (resp) {
             log ("ASPACE SEARCH RESULTS returned")
+            log(resp)
             self.render_search_results(q, resp)
         })
     },
@@ -65,6 +66,53 @@ var ApaceController = Class.extend ({
             this.search()
         }
     },
+
+    getResource: function () {
+
+        if (!this.TOKEN) {
+            this.get_token(this._getResource)
+        }
+        else {
+            this._getResource()
+        }
+    },
+
+    _getResource: function() {
+        log ("Aspace SEARCH")
+        var id = $('#query').val().trim();
+        // log (' - q: ' + q);
+        var url = this.api_baseurl + '/repositories/2/'+id;
+
+        /* NOTE: all the "keyword" queries below yield same results */
+        // var params = {
+        //     page : '1',
+        //     // q: 'title:"' + q + '"',
+        //     // q: 'notes:"' + q + '"',
+        //     q: 'notes:"' + q + '" OR title:"' + q + '"',
+        //
+        //     // q: 'keyword:"' + q + '"',
+        //     // 'q[]': q,
+        //     // 'q[]' : ['keyword:"' + q + '"'],
+        //     'op[]': '',
+        //     facet: ["resource_type_enum_s", "level_enum_s", "type_enum_s"],
+        //     // 'fq': 'NOT type:"accessrestrict"'
+        // }
+        var self = this;
+
+        log ('Aspace service query: ' + url)
+        // log (' -- query params: ' + stringify(params))
+
+        $.ajax({
+            url: url,
+            data: {},
+            headers: {'X-ArchivesSpace-Session': self.TOKEN}
+        }).done (function (resp) {
+            log ("ASPACE SEARCH RESULTS returned")
+            // self.render_search_results(id, resp)
+            self.render_result(id, resp, $('#aspace-results'))
+        })
+    },
+
     render_search_results: function (q, data) {
         var $target = $('#aspace-results').html('');
 
@@ -95,7 +143,7 @@ var ApaceController = Class.extend ({
         var self = this;
         $(results).each (function (i, result) {
 
-            $result_dom = $t('li').addClass('.result')
+            var $result_dom = $t('li').addClass('.result')
             $result_dom
                 .appendTo($target)
                 .append($t('div')
@@ -129,7 +177,61 @@ var ApaceController = Class.extend ({
                     .html(result.summary.trimToLength(200)))
             }
         })
+    },
+
+    render_result: function (i, result, $target) {
+
+
+        // slog (result.notes)
+        var description = '';
+        $(result.notes).each (function (i, note) {
+            log (note.label)
+            if (note.type == 'scopecontent') {
+                var dlist = [];
+
+                $(note.subnotes).each (function (j, sub) {
+                    dlist.push (sub.content)
+                })
+
+                description = dlist.join ('\n\n');
+            }
+        })
+
+        var $result_dom = $t('li').addClass('.result')
+        $result_dom
+            .appendTo($target)
+            .append($t('div')
+                .addClass('title')
+                .html(result.title)
+                .append($t('a')
+                    .addClass ('repo-link')
+                    .prop ('href', self.ui_baseurl + result.uri)
+                    .attr ('target', 'aspace')
+                    .html($t('span')
+                        .addClass ('ui-icon ui-icon-extlink'))))
+
+        var $attrs = $t('div').addClass('result-attributes')
+        if (result.level) {
+            $attrs.append($t('div')
+                .addClass('result-attr')
+                .html('level: ' + result.level))
+        }
+
+        if (result.resource_type) {
+            $attrs.append($t('div')
+                .addClass('result-attr')
+                .html('resource type: ' + result.resource_type))
+        }
+
+        $result_dom.append ($attrs);
+
+        if (description) {
+            $result_dom.append($t('div')
+                .addClass('description')
+                .html(description.trimToLength(200)))
+        }
     }
+
 });
 
 
