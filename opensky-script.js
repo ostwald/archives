@@ -29,11 +29,11 @@ var OpenSkyController = Class.extend ({
         // var query = query + ' NOT RELS_INT_embargo-expiry-notification-date_literal_ms:*';
         // var query = query + ' NOT RELS_INT_embargo-until_literal_ms:*';
 
-        log (query)
 
         // query += ' NOT mods_extension_collectionKey_ms:articles NOT mods_extension_collectionKey_ms:books'
 
-        var url = this.api_baseurl + '/service/search/v1'
+        // var url = this.api_baseurl + '/service/search/v1'
+        var url = this.api_baseurl + '/osws/search/v1';    // DEVEL
         var params = {
             // q: 'mods_titleInfo_title_mt:"' + q + '"',
             q: query,
@@ -77,7 +77,7 @@ var OpenSkyController = Class.extend ({
 
 
     render_search_results:function (q, data) {
-        log ("render_search_results!?")
+        log ("render_search_results")
 
         var $target = $('#opensky-results').html('');
         var osws_response = new OSWSResponse(data);
@@ -97,22 +97,22 @@ var OpenSkyController = Class.extend ({
 
             var opensky_url = this.get_opensky_query(q);
             log ('OpenSky url: ' + opensky_url)
-            $('#opensky-see-all-button')
-                .html ($t('a')
-                    .prop('href', opensky_url)
-                    .prop('target', 'opensky')
-                    // .html("See all " + total_hits + " results"))
-                    .html("See all results"))
-                .show()
-                .button()
-        }
 
+            $('#opensky-see-all-button')
+                .click (function (event) {
+                    log ("opensky_url: " + opensky_url)
+                    window.open (opensky_url, 'opensky');
+                    return false;
+                })
+                .button()
+                .show()
+        }
 
         $(results).each(function (i, result_data) {
             var result = new OSWSModsResult (result_data)
             $target.append(result.render());
-
         })
+
     }
 
 })

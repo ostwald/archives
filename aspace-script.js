@@ -84,11 +84,11 @@ var ApaceController = Class.extend ({
 
             log ("ASSPACE URL!: " + search_url)
             $('#aspace-see-all-button')
-                .html ($t('a')
-                    .prop('href', search_url)
-                    .prop('target', 'aspace')
-                    // .html("See all " + total_hits + " results"))
-                    .html("See all results"))
+
+                .click (function (event) {
+                    window.open (search_url, 'aspace');
+                    return false;
+                })
                 .show()
                 .button()
         }
@@ -129,7 +129,6 @@ var ApaceController = Class.extend ({
                     .html(result.summary.trimToLength(200)))
             }
         })
-
     }
 });
 

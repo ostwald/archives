@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="styles.css">
 
+    <script src="config.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="base-script.js"></script>
+
     <script src="aspace-script.js"></script>
     <script src="opensky-model.js"></script>
     <script src="mods-model.js"></script>
     <script src="opensky-script.js"></script>
-
-    <!--    <script src="model.js"></script>
-        <script src="mods-model.js"></script>-->
 
     <link rel="shortcut icon" type="image/png" href="favicon.png">
 </head>
@@ -34,12 +34,12 @@
 
 
     <div id="aspace-wrapper" class="repo-wrapper" style="display:none">
-        <div id="aspace-see-all-button" class="see-all-button"></div>
+        <button id="aspace-see-all-button" class="see-all-button">See all results</button>
         <h3>Archival Collections</h3>
         <ol id="aspace-results" class="results-list"></ol>
     </div>
     <div id="opensky-wrapper" class="repo-wrapper" style="display:none">
-        <div id="opensky-see-all-button" class="see-all-button"></div>
+        <button id="opensky-see-all-button" class="see-all-button">See all results</button>
         <h3>Digital Collections</h3>
         <ol id="opensky-results" class="results-list"></ol>
     </div>
@@ -48,13 +48,10 @@
 </body>
 <script>
     $(function () {
-        var ASPACE_API = 'http://oswscl.dls.ucar.edu:7089';
-        var ASPACE_UI = 'http://oswscl.dls.ucar.edu:7081';
+
+        var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
         var ASPACE = new ApaceController(ASPACE_API, ASPACE_UI);
 
-        var OPENSKY_API = 'https://osws.ucar.edu';
-        var OPENSKY_UI = 'https://osstage2.ucar.edu';
-        var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
 
         $('#search-button')
             .button()
@@ -77,8 +74,12 @@
 
         }
 
-//        $('#query').val('ocean');
-//        setTimeout (search, 500);
+        if (0) {
+            // $('#query').val('Staff Notes Volume 43 Issue 3');
+            $('#query').val('Atmosphere');
+            // $('#query').val('NCAR gets new fast computer');
+            setTimeout(search, 500);
+        }
 
     })
 

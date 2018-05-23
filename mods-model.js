@@ -92,7 +92,6 @@ var ModsName = Class.extend({
 var OSWSModsResult = Class.extend({
     init: function (result) {
         this.result = result;
-//        slog(result)
         this.PID = getContent(this.result.head.PID);
         this.keyDateYMD = getContent(this.result.head.keyDateYMD);
 
@@ -114,6 +113,13 @@ var OSWSModsResult = Class.extend({
         this.mods = result.metadata.mods
         this.last_mod = getContent(this.result.head.lastMod);
         this.created = getContent(this.result.head.created);
+        this.collectionName = getContent(this.result.head.collectionName);
+        this.collectionPID = getContent(this.result.head.collectionPID);
+
+        var splits = this.collectionPID.split('/')
+        if (splits.length > 1) {
+            this.collectionPID = splits[1];
+        }
 
         this.title = ''
         this.date = ''
@@ -162,6 +168,9 @@ var OSWSModsResult = Class.extend({
             });
 
             var extensions = this.mods.extension;
+            if (!$.isArray(extensions)) {
+                extensions = new Array (extensions);
+            }
             if (extensions && extensions.length) {
                 $(extensions).each(function (i, extn) {
                     for (var tag in extn) {
@@ -275,12 +284,32 @@ var OSWSModsResult = Class.extend({
         var description = $('<div>')
                 .addClass("description")
                 .append(this.description.trimToLength(200));
+
+        // var collection_name = this.collectionKey ? COLLECTION_NAME_MAPPINGS[this.collectionKey] :
+        //     "Unknown"
+
+        var collection_link = "Unknown";
+        if (this.collectionName) {
+            // var collection_name = COLLECTION_NAME_MAPPINGS[this.collectionKey];
+
+            var href = OPENSKY_UI + '/islandora/search/?type=dismax&collection=' + this.collectionPID;
+
+            collection_link = $t('a')
+                .prop('href', href)
+                .prop('target','openspace')
+                .html(this.collectionName);
+
+            // collection_link = '<a href="' + href + '">' + this.collectionName + '</a>';
+        }
+
         wrapper
             .append(date)
             .append(title)
             .append(description)
             .append($t('div')
-                .html("Collection: " + this.collectionKey + ' - ' + this.PID)
+                .html("Collection: ")
+                .append(collection_link)
+                .append (' - ' + this.PID)
                 .addClass ('result-attr'))
 
         return wrapper;
