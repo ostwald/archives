@@ -8,8 +8,8 @@ var ApaceController = Class.extend ({
     },
 
     get_token: function (callback) {
-        var url = this.api_baseurl + '/users/admin/login'
-        var data = {password:'admin'}
+        var url = this.api_baseurl + '/users/webservice/login'
+        var data = {password:'api-client'}
         var self = this;
         $.post(url, data, function (resp) {
 //                log ("success!")
@@ -79,10 +79,10 @@ var ApaceController = Class.extend ({
                 .html('No results found')
                 .css({fontStyle: 'italic'}))
         } else {
+	    
+            var search_url = this.ui_baseurl + '/search?op%5B%5D=&q%5B%5D=' + q;
 
-            var search_url = this.api_baseurl + '/search?op%5B%5D=&q%5B%5D=' + q;
-
-            log ("ASSPACE URL!: " + search_url)
+            log ("ASSPACE Search URL: " + search_url)
             $('#aspace-see-all-button')
 
                 .click (function (event) {
