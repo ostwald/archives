@@ -53,7 +53,6 @@ var ApaceController = Class.extend ({
             headers: {'X-ArchivesSpace-Session': self.TOKEN}
         }).done (function (resp) {
             log ("ASPACE SEARCH RESULTS returned")
-            log(resp)
             self.render_search_results(q, resp)
         })
     },
@@ -81,22 +80,8 @@ var ApaceController = Class.extend ({
         log ("Aspace SEARCH")
         var id = $('#query').val().trim();
         // log (' - q: ' + q);
-        var url = this.api_baseurl + '/repositories/2/'+id;
+        var url = this.api_baseurl + id;
 
-        /* NOTE: all the "keyword" queries below yield same results */
-        // var params = {
-        //     page : '1',
-        //     // q: 'title:"' + q + '"',
-        //     // q: 'notes:"' + q + '"',
-        //     q: 'notes:"' + q + '" OR title:"' + q + '"',
-        //
-        //     // q: 'keyword:"' + q + '"',
-        //     // 'q[]': q,
-        //     // 'q[]' : ['keyword:"' + q + '"'],
-        //     'op[]': '',
-        //     facet: ["resource_type_enum_s", "level_enum_s", "type_enum_s"],
-        //     // 'fq': 'NOT type:"accessrestrict"'
-        // }
         var self = this;
 
         log ('Aspace service query: ' + url)
@@ -107,7 +92,7 @@ var ApaceController = Class.extend ({
             data: {},
             headers: {'X-ArchivesSpace-Session': self.TOKEN}
         }).done (function (resp) {
-            log ("ASPACE SEARCH RESULTS returned")
+            log ("ASPACE resource data returned")
             // self.render_search_results(id, resp)
             self.render_result(id, resp, $('#aspace-results'))
         })
@@ -120,7 +105,6 @@ var ApaceController = Class.extend ({
         var total_hits = data.total_hits;
         var this_page = data.this_page;
         var last_page = data.last_page;
-
         if (!results.length) {
             log("NO results")
             $target.append($t('div')
@@ -141,7 +125,17 @@ var ApaceController = Class.extend ({
                 .button()
         }
         var self = this;
-        $(results).each (function (i, result) {
+        $(results).each (function (i, result_data) {
+            var result = new ASpaceSearchResult(result_data);
+            log ("- " + result.id)
+
+            if (result.jsonmodel_type == 'accession') {
+                log (" .. skipping accession record")
+                return;
+            }
+
+            // slog (result)
+            if ($target.children().length >= RESULTS_TO_SHOW) return;
 
             var $result_dom = $t('li').addClass('.result')
             $result_dom
@@ -157,24 +151,36 @@ var ApaceController = Class.extend ({
                             .addClass ('ui-icon ui-icon-extlink'))))
 
             var $attrs = $t('div').addClass('result-attributes')
+            // if (result.id) {
+            //     $attrs.append($t('div')
+            //         .addClass('result-attr')
+            //         .html('id: ' + result.id))
+            // }
+
             if (result.level) {
                 $attrs.append($t('div')
                     .addClass('result-attr')
-                    .html('level: ' + result.level))
+                    .html('Level: ' + result.level))
             }
 
-            if (result.resource_type) {
-                $attrs.append($t('div')
-                    .addClass('result-attr')
-                    .html('resource type: ' + result.resource_type))
-            }
+            // if (result.resource_type) {
+            //     $attrs.append($t('div')
+            //         .addClass('result-attr')
+            //         .html('resource type: ' + result.resource_type))
+            // }
+
+            // if (result.jsonmodel_type) {
+            //     $attrs.append($t('div')
+            //         .addClass('result-attr')
+            //         .html('jsonmodel type: ' + result.jsonmodel_type))
+            // }
 
             $result_dom.append ($attrs);
 
-            if (result.summary) {
+            if (result.description) {
                 $result_dom.append($t('div')
                     .addClass('description')
-                    .html(result.summary.trimToLength(200)))
+                    .html(result.description.trimToLength(200)))
             }
         })
     },
@@ -182,6 +188,7 @@ var ApaceController = Class.extend ({
     render_result: function (i, result, $target) {
 
 
+        slog (result)
         // slog (result.notes)
         var description = '';
         $(result.notes).each (function (i, note) {

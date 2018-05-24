@@ -305,12 +305,15 @@ var OSWSModsResult = Class.extend({
         wrapper
             .append(date)
             .append(title)
-            .append(description)
             .append($t('div')
-                .html("Collection: ")
-                .append(collection_link)
-                .append (' - ' + this.PID)
-                .addClass ('result-attr'))
+                .addClass ('result-attributes')
+                .html ($t('div')
+                    .html("Collection: ")
+                    .append(collection_link)
+                    // .append (' - ' + this.PID)
+                    .addClass ('result-attr')))
+            .append(description)
+
 
         return wrapper;
 

@@ -109,6 +109,7 @@ var OpenSkyController = Class.extend ({
         }
 
         $(results).each(function (i, result_data) {
+            if (i >= RESULTS_TO_SHOW) return;
             var result = new OSWSModsResult (result_data)
             $target.append(result.render());
         })

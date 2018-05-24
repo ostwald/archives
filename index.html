@@ -13,6 +13,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="base-script.js"></script>
 
+    <script src="aspace-model.js"></script>
+
     <script src="aspace-script.js"></script>
     <script src="opensky-model.js"></script>
     <script src="mods-model.js"></script>
@@ -22,13 +24,16 @@
 </head>
 <body>
 <div id="page-wrapper">
+    <div style="font-size:.85em" >
+        <a href="http://localhost/~ostwald/archives/aspace_inspector.html" style="float:right">Aspace Inspector</a>
+    </div>
     <h1 class="page-title">NCAR Archives Search</h1>
     <pre id="token" style="display:none"></pre>
 
     <div id="search-form-wrapper">
         <form id="search-form">
             <input type="text" id="query" value="" placeholder="e.g., Tamex" maxlength="200"/>
-            <button type="button" id="search-button">search</button>
+            <button type="button" id="search-button">Search</button>
         </form>
     </div>
 
@@ -74,9 +79,10 @@
 
         }
 
-        if (0) {
+        if (1) {
             // $('#query').val('Staff Notes Volume 43 Issue 3');
-            $('#query').val('Atmosphere');
+//            $('#query').val('Atmosphere');
+            $('#query').val('tamex');
             // $('#query').val('NCAR gets new fast computer');
             setTimeout(search, 500);
         }

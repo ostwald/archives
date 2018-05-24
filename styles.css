@@ -13,6 +13,7 @@ body {
 
 h1.page-title {
     text-align:center;
+    clear:both;
 }
 
 h3 {
@@ -40,6 +41,12 @@ input#query {
     background:white;
     border-top:thick forestgreen solid;
 }
+
+#search-button {
+    position:relative;
+    top:-2px;
+}
+
 
 .ui-button {
     background:forestgreen;

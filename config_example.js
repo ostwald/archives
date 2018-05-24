@@ -16,3 +16,5 @@ var ASPACE_UI = 'http://oswscl.dls.ucar.edu:7081';
 //        var OPENSKY_API = 'https://osws.ucar.edu';
 var OPENSKY_API = 'http://localhost:8080';
 var OPENSKY_UI = 'https://osstage2.ucar.edu';
+
+var RESULTS_TO_SHOW = 5;
