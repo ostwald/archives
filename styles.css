@@ -8,7 +8,7 @@ body {
 #page-wrapper {
     width:95%;
     margin:auto;
-    border:0 solid black;
+    border:0px solid black;
 }
 
 h1.page-title {
@@ -31,12 +31,17 @@ input#query {
     width:300px
 }
 
+.repo-desc {
+    /*margin:5px 20px 0px 24px;*/
+    margin:5px 20px 0px 0px;
+    font-size:.85em;
+}
 
 .repo-wrapper {
     text-align:left;
     display:inline-block;
-    width:40%;
-    min-width:400px;
+    width:45%;
+    min-width:375px;
     padding:20px;
     background:white;
     border-top:thick forestgreen solid;
@@ -83,12 +88,16 @@ input#query {
     margin-bottom:15px;
 }
 
+ol.results-list {
+    margin-top:5px;
+}
+
 /* ASPACE STYLES */
 
 #aspace-wrapper {
     /*border:thin orange solid;*/
     /*float:left;*/
-    margin-right:20px;
+    margin-right:10px;
 
 }
 
