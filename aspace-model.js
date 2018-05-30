@@ -13,7 +13,7 @@ var ASpaceSearchResult = Class.extend ({
     },
 
     get_description: function () {
-        log ("getting description for " + this.jsonmodel_type)
+        // log ("getting description for " + this.jsonmodel_type)
         var description = '';
         var note_type = '';
         if (this.jsonmodel_type == 'archival_object' ||
@@ -23,7 +23,7 @@ var ASpaceSearchResult = Class.extend ({
         }
         else if (this.jsonmodel_type == 'agent_person') {
             note_type = 'note_bioghist';
-            slog (this.json.notes);
+            // slog (this.json.notes);
         }
 
         var notes = this.json.notes;
@@ -31,7 +31,7 @@ var ASpaceSearchResult = Class.extend ({
 
         $(notes).each (function (j, note) {
             if (note.type == note_type || note.jsonmodel_type == note_type) {
-                log ("found " + note_type)
+                // log ("found " + note_type)
                 var dlist = [];
 
                 $(note.subnotes).each (function (k, sub) {

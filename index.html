@@ -19,6 +19,7 @@
     <script src="opensky-model.js"></script>
     <script src="mods-model.js"></script>
     <script src="opensky-script.js"></script>
+    <script src="archive-it-script.js"></script>
 
     <link rel="shortcut icon" type="image/png" href="favicon.png">
 </head>
@@ -59,6 +60,16 @@
         <ol id="opensky-results" class="results-list"></ol>
     </div>
 
+    <div id="archive-it-wrapper" class="repo-wrapper" style="display:none">
+        <button id="archive-it-see-all-button" class="see-all-button">See all results</button>
+        <h3>Web Archives</h3>
+        <div class="repo-desc">
+            Stuff from the wayback machine.
+        </div>
+
+        <ol id="archive-it-results" class="results-list">Searching the wayback ...</ol>
+    </div>
+
 </div> <!-- page-wrapper-->
 </body>
 <script>
@@ -66,6 +77,7 @@
 
         var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
         var ASPACE = new ApaceController(ASPACE_API, ASPACE_UI);
+        var ARCHIVEIT = new ArchiveItController(ARCHIVE_IT_API, ARCHIVE_IT_UI);
 
 
         $('#search-button')
@@ -86,6 +98,7 @@
             $('.repo-wrapper').show();
             ASPACE.doSearch();
             OPENSKY.search();
+            ARCHIVEIT.search();
 
         }
 

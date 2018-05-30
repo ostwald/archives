@@ -127,7 +127,7 @@ var ApaceController = Class.extend ({
         var self = this;
         $(results).each (function (i, result_data) {
             var result = new ASpaceSearchResult(result_data);
-            log ("- " + result.id)
+            // log ("- " + result.id)
 
             if (result.jsonmodel_type == 'accession') {
                 log (" .. skipping accession record")
