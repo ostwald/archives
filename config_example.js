@@ -8,7 +8,6 @@ named "config.js", and edit as necessary
 
 ----------------------- */
 
-
 // Config - GLOBALS
 var ASPACE_API = 'http://oswscl.dls.ucar.edu:7089';
 var ASPACE_UI = 'http://oswscl.dls.ucar.edu:7081';
