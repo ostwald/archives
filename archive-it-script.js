@@ -27,7 +27,7 @@ var ArchiveItController = Class.extend ({
         }).done (function (resp) {
             log ("ARchiveIt SEARCH RESULTS returned")
             var json_data = JSON.parse (resp);
-            slog (json_data);
+            // slog (json_data);
             self.render_search_results(q, json_data)
         })
     },
