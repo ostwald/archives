@@ -1,0 +1,233 @@
+<?php
+
+require_once dirname(__FILE__) . '/includes/utilities.inc';
+
+/**                                                                                                        
+ * Implements hook_init().                                                                                 
+ */
+function psearch_init() {
+    drupal_add_css(drupal_get_path('module', 'psearch') . '/css/psearch-form.css');
+}
+/**
+ * Implements hook_theme().
+ */
+function psearch_theme () {
+    $path = drupal_get_path('module', 'psearch');
+    $file = 'theme.inc';
+    return array (
+        'psearch_wrapper' => array (
+            'path' => $path . '/theme',
+            'file' => $file,
+            'template' => 'psearch-wrapper',
+            'variables' => array ('fooberry' => null),
+        ),
+    );
+}
+
+/**
+ * Implements hook_meun().
+ */
+function psearch_menu() {
+    $items = array();
+    $items['psearch/archive-it'] = array(
+        'title' => 'archive-it proxy',
+        'page callback' => 'archive_it_proxy',
+        'access callback' => TRUE,
+    );
+    $items['psearch/aspace'] = array(
+        'title' => 'Aspace proxy',
+        'page callback' => 'aspace_proxy',
+        'access callback' => TRUE
+    );
+    return $items;
+}
+
+function get_fooberry_content () {
+    // return 'fooberry says hi';
+    $arr = array();
+    $arr['barb'] = 'erana';
+    $arr['stepn'] = 'stone';
+    return drupal_json_output($arr);
+}
+
+/**
+ * Implements hook_help().
+ */
+function psearch_help($path, $arg) {
+
+    if ($path == 'admin/help#opensky') {
+        $output = '<h3>' . t('About') . '</h3>';
+        $output .= '<p>' . t('The psearch module provides extensions and customization to Archives functionality.') . '</p>';
+        return $output;
+    }
+}
+
+/**
+ * these "info" definitions are necessary to get the blocks on the blocks UI page
+ */
+function psearch_block_info() {
+
+    $blocks['psearch_search_form_block'] = array (
+        'info' => t('Psearch Search Form'),
+    );
+    $blocks['psearch_search_wrapper_block'] = array (
+        'info' => t('Parallel Search Form Wrapper'),
+    );
+    return $blocks;
+}
+
+/**
+ * implements hook_block_view
+ *
+ * OpenSky Blocks
+ */
+function psearch_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'psearch_search_form_block':
+            $block['subject'] = t('Parallel search form');
+//          $block['content'] = drupal_render(drupal_get_form('psearch_search_form'));
+            $block['content'] = drupal_get_form('psearch_search_form');
+            break;
+        case 'psearch_search_wrapper_block':
+            $block['subject'] = t('Parallel search form wrapper');
+            $block['content'] = get_psearch_form_wrapper();
+    }
+
+    return $block;
+}
+
+function get_psearch_form_wrapper() {
+    return theme('psearch_wrapper', array (
+        'fooberry' => 'whats up doc?',
+    ));
+}
+
+/**                                                                                                        
+ * Form constructor for NLDR Search                                                                        
+ */
+function psearch_search_form($form_state, $delta) {
+
+    // to see what js/css libraries are available
+//    dpm(drupal_get_library('system'));
+  
+    $js_path = drupal_get_path('module','psearch') . '/js';
+
+    $form['#method'] = 'post';
+    $form['#attached'] = array (
+        'library' => array (
+            array ('system', 'ui'),
+            array ('system', 'ui.dialog'),
+            array ('system', 'ui.widget')
+        ),
+      'js' => array (
+//            "$js_path/base-script.js", // now loaded in template
+            "$js_path/psearch-form.js",
+        ),
+    );
+          
+        
+    // Container for the form
+    $form['search_psearch'] = array(
+        '#type' => 'fieldset',
+        '#title' => 'Search the Archives',
+    );
+    // Radios
+    $form['search_psearch']['scope'] = array (
+        '#type' => 'radios',
+//        '#title' => 'Search scope',
+//        '#description' => 'Select a search scope',
+        '#default_value' => t('All'),
+        '#options' => array (
+            t('All'),
+            t('Aspace'),
+            t('OpenSky'),
+            t('Archive-it')
+        )
+    );
+
+    // Search term
+    $form['search_psearch']['q'] = array(
+        '#type' => 'textfield',
+//        '#title' => t('Search'),
+        '#size' => 50,
+            '#maxlength' => 255
+    );
+    
+    $form['search_psearch']['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Go'),
+    );
+
+    return $form;
+}
+
+function psearch_search_form_submit($form, &$form_state) {
+    // dpm ('psearch_search_form_submit()');
+
+    if (0) { // Show form
+        dpm ('- here is the form');
+        dpm ($form_state);
+    }
+    $query = $form_state['values']['q'];
+    $scope = $form_state['values']['scope'];
+
+//    dpm ("scope: $scope,  query: $query");
+    
+    if ($scope == '1') {
+
+        $aspace_endpoint = 'http://oswscl.dls.ucar.edu:7081/search';
+        $aspace_base_url = $aspace_endpoint . '?op%5B%5D=&q%5B%5D=';
+        $aspace_url = $aspace_base_url.$query;
+
+//        dpm ($aspace_url);
+
+        if (1) {
+            // redirect with single string
+            $form_state['redirect'] = $aspace_url;
+        } else {
+            // build url using param array - for some reason this didn't work ...
+            $form_state['redirect'] = array (
+                $aspace_endpoint,
+                array (
+//                'op[]' => '',
+//                'q[]' =>$query,
+                    
+                    'op%5B%5D' => '',
+                    'q%5B%5D' =>$query,
+                ),
+            );
+        }
+        return;
+    }
+
+    if ($scope == '2') { // opensky
+
+        // https://osstage2test.ucar.edu/islandora/search/tamex?type=dismax&collection=opensky%3Aarchives
+        
+        $opensky_url = "https://osstage2test.ucar.edu/islandora/search/$query?type=dismax&collection=opensky%3Aarchives";
+//        dpm ('OpenSky url: ' . $opensky_url);
+        $form_state['redirect'] = $opensky_url;
+        return;
+    }
+
+    if ($scope == '3') { // archiveit
+        // https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=tamex
+
+        $base_archiveit_url = 'https://www.archive-it.org/collections/3544';
+        $archiveit_url = $base_archiveit_url . '?page=1&show=ArchivedPages&q=' . $query;
+//        dpm ('archiveit url: ' . $archiveit_url);
+        $form_state['redirect'] = $archiveit_url;
+        return;
+    }
+
+    dpm ('scope is ALL');
+    $options = array('query' => array ('query' => $query));
+
+    // we don't want to go anywhere here!
+    // is this one we can handle completely in javascript???
+    drupal_goto ('psearch', $options);
+    
+    return;
+}
+

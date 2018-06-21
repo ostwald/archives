@@ -1,0 +1,6 @@
+name = Parallel Search
+description = This module provides parallel search for the Archives
+dependencies[] = block
+
+core = 7.x
+; stylesheets[all][] = css/psearch.base.css
