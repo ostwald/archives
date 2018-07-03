@@ -8,21 +8,6 @@ require_once dirname(__FILE__) . '/includes/utilities.inc';
 function psearch_init() {
     drupal_add_css(drupal_get_path('module', 'psearch') . '/css/psearch-form.css');
 }
-/**
- * Implements hook_theme().
- */
-function psearch_theme () {
-    $path = drupal_get_path('module', 'psearch');
-    $file = 'theme.inc';
-    return array (
-        'psearch_wrapper' => array (
-            'path' => $path . '/theme',
-            'file' => $file,
-            'template' => 'psearch-wrapper',
-            'variables' => array ('fooberry' => null),
-        ),
-    );
-}
 
 /**
  * Implements hook_meun().
@@ -42,14 +27,6 @@ function psearch_menu() {
     return $items;
 }
 
-function get_fooberry_content () {
-    // return 'fooberry says hi';
-    $arr = array();
-    $arr['barb'] = 'erana';
-    $arr['stepn'] = 'stone';
-    return drupal_json_output($arr);
-}
-
 /**
  * Implements hook_help().
  */
@@ -66,10 +43,11 @@ function psearch_help($path, $arg) {
  * these "info" definitions are necessary to get the blocks on the blocks UI page
  */
 function psearch_block_info() {
-
+    $blocks = array();
     $blocks['psearch_search_form_block'] = array (
         'info' => t('Psearch Search Form'),
     );
+
     $blocks['psearch_search_wrapper_block'] = array (
         'info' => t('Parallel Search Form Wrapper'),
     );
@@ -92,15 +70,49 @@ function psearch_block_view($delta = '') {
         case 'psearch_search_wrapper_block':
             $block['subject'] = t('Parallel search form wrapper');
             $block['content'] = get_psearch_form_wrapper();
+            break;
+        case 'psearch_search_results_block':
+            $block['subject'] = t('Parallel search results');
+            $block['content'] = get_psearch_results();
+            break;
     }
 
     return $block;
 }
 
+/**
+ * Implements hook_theme().
+ */
+function psearch_theme () {
+    $path = drupal_get_path('module', 'psearch');
+    $file = 'theme.inc';
+    return array (
+        'psearch_wrapper' => array (
+            'path' => $path . '/theme',
+            'file' => $file,
+            'template' => 'psearch-wrapper',
+            'variables' => array ('fooberry' => NULL),
+        ),
+        'psearch_results' => array (
+            'path' => $path . '/theme',
+            'file' => $file,
+            'template' => 'psearch-results',
+            'variables' => array (),
+        ),
+    );
+}
+
+
 function get_psearch_form_wrapper() {
-    return theme('psearch_wrapper', array (
+    $output = theme('psearch_wrapper', array (
         'fooberry' => 'whats up doc?',
     ));
+    return $output;
+}
+
+function get_psearch_results() {
+    return theme('psearch_results', array ());
+    //return 'oh no you dont';
 }
 
 /**                                                                                                        
@@ -130,7 +142,7 @@ function psearch_search_form($form_state, $delta) {
     // Container for the form
     $form['search_psearch'] = array(
         '#type' => 'fieldset',
-        '#title' => 'Search the Archives',
+        // '#title' => 'Search the Archives',
     );
     // Radios
     $form['search_psearch']['scope'] = array (
@@ -140,9 +152,9 @@ function psearch_search_form($form_state, $delta) {
         '#default_value' => t('All'),
         '#options' => array (
             t('All'),
-            t('Aspace'),
-            t('OpenSky'),
-            t('Archive-it')
+            t('Collection Inventories'), // Aspace
+            t('Digital Collections'), // OpenSky
+            t('Archived Websites'), // Archive-it
         )
     );
 
@@ -163,7 +175,6 @@ function psearch_search_form($form_state, $delta) {
 }
 
 function psearch_search_form_submit($form, &$form_state) {
-    // dpm ('psearch_search_form_submit()');
 
     if (0) { // Show form
         dpm ('- here is the form');
@@ -179,8 +190,6 @@ function psearch_search_form_submit($form, &$form_state) {
         $aspace_endpoint = 'http://oswscl.dls.ucar.edu:7081/search';
         $aspace_base_url = $aspace_endpoint . '?op%5B%5D=&q%5B%5D=';
         $aspace_url = $aspace_base_url.$query;
-
-//        dpm ($aspace_url);
 
         if (1) {
             // redirect with single string
@@ -206,7 +215,6 @@ function psearch_search_form_submit($form, &$form_state) {
         // https://osstage2test.ucar.edu/islandora/search/tamex?type=dismax&collection=opensky%3Aarchives
         
         $opensky_url = "https://osstage2test.ucar.edu/islandora/search/$query?type=dismax&collection=opensky%3Aarchives";
-//        dpm ('OpenSky url: ' . $opensky_url);
         $form_state['redirect'] = $opensky_url;
         return;
     }
@@ -216,7 +224,6 @@ function psearch_search_form_submit($form, &$form_state) {
 
         $base_archiveit_url = 'https://www.archive-it.org/collections/3544';
         $archiveit_url = $base_archiveit_url . '?page=1&show=ArchivedPages&q=' . $query;
-//        dpm ('archiveit url: ' . $archiveit_url);
         $form_state['redirect'] = $archiveit_url;
         return;
     }

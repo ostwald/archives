@@ -271,15 +271,16 @@ var OSWSModsResult = Class.extend({
     render: function () {
         var wrapper = $('<li>').addClass('result')
         var title = $('<div>')
-            .html(this.title)
-            .addClass('title')
+//            .html(this.title)
+            .addClass('result-title')
             .append ($t('a')
-                .addClass ('repo-link')
-                .attr('href', 'http://n2t.net/' + this.ark)
-                .attr('target', 'opensky')
-                .attr('title', 'View in OpenSky')
-                .html($t('span')
-                    .addClass('ui-icon ui-icon-extlink')))
+                     .addClass ('repo-link')
+                     .attr('href', 'http://n2t.net/' + this.ark)
+                     .attr('target', 'opensky')
+                     .attr('title', 'View in OpenSky')
+		     .html(this.title)
+                     .append($t('span')
+			   .addClass('ui-icon ui-icon-extlink')))
 
 
 
@@ -610,6 +611,5 @@ var OSWSModsResult = Class.extend({
 });
 
 window.OSWSModsResult = OSWSModsResult
-    log ("OSWSModsResult made global");
     
 }(jQuery));

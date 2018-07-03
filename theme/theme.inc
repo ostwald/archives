@@ -29,5 +29,5 @@ function template_preprocess_psearch_wrapper(&$variables) {
         $variables['is_psearch_page'] = 0;
     }
     $variables['query'] = $query;
-
+    // dpm ('completed template_preprocess_psearch_wrapper');
 }

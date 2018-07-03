@@ -1,22 +1,4 @@
-body {
-    font-family:Arial;
-    margin:20px;
-    background: #fbfbf9;
-    background-image:url(assets/dust_scratches.png)
-}
-
-#page-wrapper {
-    width:95%;
-    margin:auto;
-    border:0px solid black;
-}
-
-h1.page-title {
-    text-align:center;
-    clear:both;
-}
-
-h3 {
+h3.source {
     margin:0;
     padding:0 0 5px;
 }
@@ -25,26 +7,43 @@ h3 {
     font-size:.85em;
 }
 
+/*
 input#query {
     font-size:1.0em;
     padding:3px;
     width:300px
 }
+*/
 
 .repo-desc {
     /*margin:5px 20px 0px 24px;*/
-    margin:5px 20px 0px 0px;
+    margin:10px 20px 0px 0px;
     font-size:.85em;
 }
 
+/* container for search results */
 .repo-wrapper {
     text-align:left;
     display:inline-block;
-    width:44%;
+    width:46%;
     min-width:375px;
-    padding:20px;
-    background:white;
-    border-top:thick forestgreen solid;
+    padding:13px 10px;
+    background:#efefef;
+    /* border-top:thick forestgreen solid; */
+    border-top:3px #025081 solid; /* blue */
+    margin:20px 0 0 0;
+}
+
+.repo-wrapper h3, .source-label {
+    font-size:1.2em;
+    font-weight:bold;
+    margin:0px 0px 0px 0px;
+    color:#003366; /* dark blue */
+    font-family:font-family: "UbuntuBold","Lucida Grande",Verdana,Arial, sans-serif;
+}
+
+.source-label {
+    /* border:thick dashed orange; */
 }
 
 #search-button {
@@ -54,8 +53,9 @@ input#query {
 
 
 .ui-button {
-    background:forestgreen;
-    color:white;
+    background:white;
+    color:#D75900;  /* orange */
+    font-weight:normal;
 }
 
 .see-all-button {
@@ -65,15 +65,17 @@ input#query {
 .see-all-button.ui-button {
     top:-5px;
 }
-
+OA
 .see-all-button.ui-state-default a {
     color:white;
 }
-
-.title {
+/* title is a loaded style/class in Archives site */
+.result-title {
     padding:8px 0 3px;
     font-weight:bold;
-    font-size:.9em;
+    font-size:1.0em;
+    text-transform: none;
+    color:#025081;  /* blue */
 }
 
 .repo-link .ui-icon {
@@ -89,7 +91,14 @@ input#query {
 }
 
 ol.results-list {
-    margin-top:5px;
+    list-style-type:none;
+    margin:0;
+/*    border:thin solid orange;*/
+}
+
+.results-msg {
+    font-style:italic;
+    margin:10px;
 }
 
 /* ASPACE STYLES */

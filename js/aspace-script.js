@@ -48,7 +48,7 @@
             var self = this;
 	    
             log ('Aspace service query: ' + url)
-            log (' -- query params: ' + stringify(params))
+            log ('query params: ' + stringify(params))
 	    
             $.ajax({
 		url: url,
@@ -112,16 +112,17 @@
 		log("NO results")
 		$target.append($t('div')
 			       .html('No results found')
-			       .css({fontStyle: 'italic'}))
+			       // .css({fontStyle: 'italic'}))
+			       .addClass('results-msg'));
             } else {
 		
-		var search_url = this.ui_baseurl + '/search?op%5B%5D=&q%5B%5D=' + q;
+		var see_all_url = this.ui_baseurl + '/search?op%5B%5D=&q%5B%5D=' + q;
 		
-		log ("ASSPACE Search URL: " + search_url)
+		// log ("ASSPACE See all URL: " + see_all_url)
 		$('#aspace-see-all-button')
 		
                     .click (function (event) {
-			window.open (search_url, 'aspace');
+			window.open (see_all_url, 'aspace');
 			return false;
                     })
                     .show()
@@ -140,17 +141,27 @@
 		// slog (result)
 		if ($target.children().length >= RESULTS_TO_SHOW) return;
 		
-		var $result_dom = $t('li').addClass('.result')
+		var $result_dom = $t('li').addClass('result')
 		$result_dom
                     .appendTo($target)
                     .append($t('div')
-			    .addClass('title')
-			    .html(result.title)
+			    .addClass('result-title')
+//			    .html(result.title)
+
+/*
+                            .append($t('a')
+				.addClass ('repo-link')
+				.attr ('href', self.ui_baseurl + result.uri)
+				.attr ('target', 'aspace')
+				.html(result.title + "OINK"))
+
+*/			    
 			    .append($t('a')
 				    .addClass ('repo-link')
 				    .attr ('href', self.ui_baseurl + result.uri)
 				    .attr ('target', 'aspace')
-				    .html($t('span')
+				    .html(result.title)
+				    .append ($t('span')
 					  .addClass ('ui-icon ui-icon-extlink'))))
 		
 		var $attrs = $t('div').addClass('result-attributes')
@@ -159,12 +170,13 @@
 		//         .addClass('result-attr')
 		//         .html('id: ' + result.id))
 		// }
+
 		
-		if (result.level) {
-                    $attrs.append($t('div')
-				  .addClass('result-attr')
-				  .html('Level: ' + result.level))
-		}
+		// if (result.level) {
+                //    $attrs.append($t('div')
+		//		  .addClass('result-attr')
+		//		  .html('Level: ' + result.level))
+		// }
 		
 		// if (result.resource_type) {
 		//     $attrs.append($t('div')
@@ -178,7 +190,7 @@
 		//         .html('jsonmodel type: ' + result.jsonmodel_type))
 		// }
 		
-		$result_dom.append ($attrs);
+		// $result_dom.append ($attrs);
 		
 		if (result.description) {
                     $result_dom.append($t('div')
@@ -186,11 +198,10 @@
 				       .html(result.description.trimToLength(200)))
 		}
             })
-		},
+	},
 	
 	render_result: function (i, result, $target) {
-	    
-	    
+
             slog (result)
             // slog (result.notes)
             var description = '';
@@ -207,12 +218,19 @@
 		}
             })
 		
-		var $result_dom = $t('li').addClass('.result')
+		var $result_dom = $t('li').addClass('result')
             $result_dom
 		.appendTo($target)
 		.append($t('div')
 			.addClass('title')
-			.html(result.title)
+//			.html(result.title)
+
+                        .append($t('a')
+//				.addClass ('repo-link')
+				.prop ('href', self.ui_baseurl + result.uri)
+				.attr ('target', 'aspace')
+				.html(result.title + "OINK"))
+			
 			.append($t('a')
 				.addClass ('repo-link')
 				.prop ('href', self.ui_baseurl + result.uri)
@@ -256,7 +274,7 @@
 	    var q = $('#edit-q').val().trim();
 	    var params = {'query':q};
 	    log ("api_baseurl: " + this.api_baseurl);
-	    log (" - " + stringify(params));
+	    log ("params: " + stringify(params));
 	    var self = this;
 	    $.ajax({
 		url: self.api_baseurl,
@@ -267,7 +285,7 @@
 		    slog (settings);
 		},
 		success: function (resp) {
-		    log ("ASPACE proxy SEARCH RESULTS returned: (" + typeof (resp) + ")");
+		    log ("ASPACE proxy SEARCH RESULTS returned)");
 		    log (resp);
 		    self.render_search_results(q, resp);
 		}
