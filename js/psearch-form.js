@@ -22,7 +22,6 @@
 		log ('psearch-search-form SUBMIT');
 		log ($('#psearch-search-form').serialize());
 		var scope = $('input[name="scope"]:checked', '#psearch-search-form').val();
-		var scope_foo = $('input[name="scope"]:checked', '#psearch-search-form').html();
 
 		log ('scope: '  + scope);
 		log ("query: " + query);
@@ -32,8 +31,7 @@
 		    return
 		}
 
-		// here we are, we have a search term and we are doning psearch
-		log ("DO P SEARCH HERE");
+		// we have a search term and we are doing psearch
 		event.preventDefault();
 		window.location = 'psearch?query=' + query;
 	    })

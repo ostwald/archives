@@ -128,15 +128,15 @@ var OSWSModsResult = Class.extend({
             this.collectionPID = splits[1];
         }
 
-        this.title = ''
-        this.date = ''
-        this.description = ''
-        this.genre = ''
-        this.title = ''
-        this.pub_name = ''
+        this.title = '';
+        this.date = '';
+        this.description = '';
+        this.genre = '';
+        this.title = '';
+        this.pub_name = '';
 
-        this.names = []
-        this.authors = []
+        this.names = [];
+        this.authors = [];
 
         this.classification = null;
         this.collaboration = null;
@@ -145,7 +145,7 @@ var OSWSModsResult = Class.extend({
         if (this.mods) {
             this.title = this.getTitle() || 'UNKNOWN';
             this.date = this.getDate();
-            this.description = this.getModsContent('abstract');
+            this.description = this.getModsContent('abstract') || '';
             this.genre = this.getModsContent('genre.content');
             var relatedItems = this.mods.relatedItem;
 
@@ -253,7 +253,6 @@ var OSWSModsResult = Class.extend({
         // sometimes there are two titles - in this case we look for the
         // non-alternate
         if (!title) {
-            log ("WHAT THE????")
             var titles = this.mods.titleInfo;
             for (var i=0;i<titles.length;i++) {
                 var candidate = titles[i]
@@ -275,13 +274,14 @@ var OSWSModsResult = Class.extend({
             .addClass('result-title')
             .append ($t('a')
                      .addClass ('repo-link')
-                     .attr('href', 'http://n2t.net/' + this.ark)
-                     .attr('target', 'opensky')
-                     .attr('title', 'View in OpenSky')
 		     .html(this.title)
+                     .attr('href', 'http://n2t.net/' + this.ark)
+                     .attr('title', 'View in OpenSky')
+		    );
+/*                     .attr('target', 'opensky')
                      .append($t('span')
 			   .addClass('ui-icon ui-icon-extlink')))
-
+*/
 
 
         var date = $('<div>')
@@ -289,10 +289,13 @@ var OSWSModsResult = Class.extend({
             .html($('<div>')
             .html(this.date))
 
+	// don't call trimToLength if there is no description
         var description = $t('div')
-                .addClass("description")
-                .html(this.description.trimToLength(200));
-
+            .addClass("description");
+	if (this.description) {
+	    description.html(this.description.trimToLength(200));
+	}
+	
         var collection_link = "Unknown";
         if (this.collectionName) {
 

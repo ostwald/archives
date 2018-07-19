@@ -1,5 +1,9 @@
 <?php
 
+define('BASE_ARCHIVEIT_URL', 'https://www.archive-it.org/collections/3544');
+define('BASE_OPENSKY_URL', 'https://osstage2test.ucar.edu/islandora');
+define('BASE_ASPACE_URL','http://osws-p.ucar.edu:7081/search');
+
 require_once dirname(__FILE__) . '/includes/utilities.inc';
 
 /**                                                                                                        
@@ -137,18 +141,25 @@ function psearch_search_form($form_state, $delta) {
             "$js_path/psearch-form.js",
         ),
     );
-          
-        
+
     // Container for the form
+    // Give container a label if we're not on search page
+    $pat = '/psearch';
+    if (substr(request_uri(), 0, strlen($pat)) === $pat) {
+        // this is psearch page
+        $container_title = '<none>';
+    } else {
+        // this is NOT psearch page
+        $container_title = 'Search the Archives!';
+    }
+    
     $form['search_psearch'] = array(
         '#type' => 'fieldset',
-        // '#title' => 'Search the Archives',
+        '#title' => $container_title,
     );
     // Radios
     $form['search_psearch']['scope'] = array (
         '#type' => 'radios',
-//        '#title' => 'Search scope',
-//        '#description' => 'Select a search scope',
         '#default_value' => t('All'),
         '#options' => array (
             t('All'),
@@ -165,12 +176,12 @@ function psearch_search_form($form_state, $delta) {
         '#size' => 50,
             '#maxlength' => 255
     );
-    
+
     $form['search_psearch']['submit'] = array(
         '#type' => 'submit',
         '#value' => t('Go'),
     );
-
+    
     return $form;
 }
 
@@ -187,9 +198,7 @@ function psearch_search_form_submit($form, &$form_state) {
     
     if ($scope == '1') {
 
-        $aspace_endpoint = 'http://oswscl.dls.ucar.edu:7081/search';
-        $aspace_base_url = $aspace_endpoint . '?op%5B%5D=&q%5B%5D=';
-        $aspace_url = $aspace_base_url.$query;
+        $aspace_url = BASE_ASPACE_URL . "?op%5B%5D=&q%5B%5D=$query";
 
         if (1) {
             // redirect with single string
@@ -197,7 +206,7 @@ function psearch_search_form_submit($form, &$form_state) {
         } else {
             // build url using param array - for some reason this didn't work ...
             $form_state['redirect'] = array (
-                $aspace_endpoint,
+                BASE_ASPACE_URL,
                 array (
 //                'op[]' => '',
 //                'q[]' =>$query,
@@ -213,8 +222,8 @@ function psearch_search_form_submit($form, &$form_state) {
     if ($scope == '2') { // opensky
 
         // https://osstage2test.ucar.edu/islandora/search/tamex?type=dismax&collection=opensky%3Aarchives
-        
-        $opensky_url = "https://osstage2test.ucar.edu/islandora/search/$query?type=dismax&collection=opensky%3Aarchives";
+
+        $opensky_url = BASE_OPENSKY_URL."/$query?type=dismax&collection=opensky%3Aarchives";
         $form_state['redirect'] = $opensky_url;
         return;
     }
@@ -222,8 +231,7 @@ function psearch_search_form_submit($form, &$form_state) {
     if ($scope == '3') { // archiveit
         // https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=tamex
 
-        $base_archiveit_url = 'https://www.archive-it.org/collections/3544';
-        $archiveit_url = $base_archiveit_url . '?page=1&show=ArchivedPages&q=' . $query;
+        $archiveit_url = BASE_ARCHIVEIT_URL . '?page=1&show=ArchivedPages&q=' . $query;
         $form_state['redirect'] = $archiveit_url;
         return;
     }

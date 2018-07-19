@@ -68,8 +68,8 @@ var PARAMS;
     // modified for jquery 1.4.4 :(
     String.prototype.trimToLength = function(m) {
 	  return (this.length > m) 
-	    	? this.substring(0, m-3) + "..."
-		: JSON.stringify(this);
+	    	? this.substring(0, m) + " ..."
+		: String(this);
 	};
 
 	//    log ("$.parseParams defined");

@@ -12,7 +12,8 @@
 
 function template_preprocess_psearch_wrapper(&$variables) {
 
-    // dpm ('template_preprocess_psearch_wrapper');
+//    dpm ('template_preprocess_psearch_wrapper');
+//    dpm ($variables);
 
     // dpm ('- request uri: ' . request_uri());
     $query = $_GET['query'];

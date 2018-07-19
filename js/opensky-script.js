@@ -95,7 +95,8 @@
 		$('#opensky-see-all-button')
                     .click (function (event) {
 			log ("opensky_url: " + opensky_url)
-			window.open (opensky_url, 'opensky');
+			// window.open (opensky_url, 'opensky');
+			window.location = opensky_url;
 			return false;
                     })
                     .button()
@@ -108,7 +109,7 @@
 		$target.append(result.render());
             })
 		
-		}
+	}
 	
     });
     

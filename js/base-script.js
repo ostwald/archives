@@ -62,10 +62,11 @@ var PARAMS;
     PARAMS = $.parseParams(window.location.search.substring(1));
 })();
 
-String.prototype.trimToLength = function(m) {
+String.prototype.trimToLengthX = function(m) {
   return (this.length > m) 
-    ? jQuery.trim(this).substring(0, m).split(" ").slice(0, -1).join(" ") + "..."
-    : this;
+//	? jQuery.trim(this).substring(0, m).split(" ").slice(0, -1).join(" ") + "..."
+        ? jQuery.trim(this).substring(0, m) + "..."
+	: this.substring(0);
 };
 
 var SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;

@@ -81,7 +81,9 @@ function aspace_proxy () {
 
 class AspaceProxy {
 
-    public $api_baseurl = 'http://oswscl.dls.ucar.edu:7089';
+    // public $api_baseurl = 'http://oswscl.dls.ucar.edu:7089';
+    public $api_baseurl = 'http://osws-p.ucar.edu:7089';
+
     public $token;
 
     public function __construct() {
@@ -117,7 +119,8 @@ class AspaceProxy {
             $result = file_get_contents($url, false, $context);
             if ($result === FALSE) {
                 /* Handle error */
-                echo 'we got an error ..';
+                echo 'Utilities.AspaceProxy got an error ..';
+                echo '- trying to search '.$url;
             }
 
 //            var_dump($result);

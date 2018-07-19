@@ -73,12 +73,14 @@
 //			    .html(result.title)
 			    .append($t('a')
 				    .addClass ('repo-link')
-				    .attr ('href', result.archive_it_url)
-				    .attr ('target', 'archive-it')
 				    .html(result.title)
+				    .attr ('href', result.archive_it_url)
+				   ));
+				    /*
+				    .attr ('target', 'archive-it')
 				    .append($t('span')
 					  .addClass ('ui-icon ui-icon-extlink'))))
-		
+				    */		
 		if (result.description) {
                     $result_dom.append($t('div')
 				       .addClass('description')

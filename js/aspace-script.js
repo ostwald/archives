@@ -122,7 +122,8 @@
 		$('#aspace-see-all-button')
 		
                     .click (function (event) {
-			window.open (see_all_url, 'aspace');
+			// window.open (see_all_url, 'aspace');
+			window.location = see_all_url;
 			return false;
                     })
                     .show()
@@ -146,25 +147,17 @@
                     .appendTo($target)
                     .append($t('div')
 			    .addClass('result-title')
-//			    .html(result.title)
-
-/*
-                            .append($t('a')
-				.addClass ('repo-link')
-				.attr ('href', self.ui_baseurl + result.uri)
-				.attr ('target', 'aspace')
-				.html(result.title + "OINK"))
-
-*/			    
 			    .append($t('a')
+				    .html(result.title)
 				    .addClass ('repo-link')
 				    .attr ('href', self.ui_baseurl + result.uri)
-				    .attr ('target', 'aspace')
-				    .html(result.title)
+				   ));
+/*				    .attr ('target', 'aspace')
 				    .append ($t('span')
 					  .addClass ('ui-icon ui-icon-extlink'))))
-		
+*/		
 		var $attrs = $t('div').addClass('result-attributes')
+
 		// if (result.id) {
 		//     $attrs.append($t('div')
 		//         .addClass('result-attr')
