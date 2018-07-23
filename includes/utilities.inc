@@ -5,9 +5,8 @@ function archive_it_proxy () {
 
     $query = $_GET['query'];
     
-    $url_live = 'https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=' . $query;
-    $url_canned = '/Users/ostwald/Desktop/archive-it.html';
-    $url_mock = 'http://localhost/~ostwald/archives/archive-it-mock.html';
+    // $url_live = 'https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=' . $query;
+    $url_live = BASE_ARCHIVEIT_URL . '?page=1&show=ArchivedPages&q=' . $query;
     
     class ResultItem {
         
@@ -43,14 +42,10 @@ function archive_it_proxy () {
     preg_match_all($item_pat, $contents, $matches);
     
     $match_items = $matches[0];
-    // print_r ($match_items);
-    
-    // echo count ($match_items) . ' items found';
     $results = array();
     
     foreach ($match_items as $html) {
         $item = new ResultItem($html);
-        //   $item->report();
         $results[] = $item;
     }
     
@@ -81,8 +76,8 @@ function aspace_proxy () {
 
 class AspaceProxy {
 
-    // public $api_baseurl = 'http://oswscl.dls.ucar.edu:7089';
-    public $api_baseurl = 'http://osws-p.ucar.edu:7089';
+    // public $api_baseurl = 'http://osws-p.ucar.edu:7089';
+    public $api_baseurl = PSEARCH_ASPACE_API;
 
     public $token;
 
@@ -123,11 +118,8 @@ class AspaceProxy {
                 echo '- trying to search '.$url;
             }
 
-//            var_dump($result);
             $resp_json = json_decode($result);
-
             return $resp_json->session;
-
         }
 
     }
@@ -151,18 +143,7 @@ class AspaceProxy {
         $context  = stream_context_create($options);
 
         $contents = file_get_contents($url, false, $context);
-        //dpm($contents);
-
         $data = drupal_json_decode($contents);
-/*
-        $response = array();
-        $response['query'] = $query;
-        $response['results'] = $data;
-        // dpm ("returning from Aspace proxy");
-        // dpm($response);
-        //return $response;
-        return drupal_json_output($response);
-*/
         return drupal_json_output($data);
     }
 
