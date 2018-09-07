@@ -13,33 +13,61 @@ var OpenSkyController = Class.extend ({
         this.$see_all_button = $('#opensky-see-all-button')
     },
 
+    makeFQ: function() {
+        return [
+            "info:fedora/archives:asr",
+            "info:fedora/archives:srm",
+            "info:fedora/archives:amsohp",
+            "info:fedora/archives:atd",
+            "info:fedora/archives:fgge",
+            "info:fedora/archives:gate",
+            "info:fedora/archives:gtpr",
+            "info:fedora/archives:guides",
+            "info:fedora/archives:hao",
+            "info:fedora/archives:ucar",
+            "info:fedora/archives:mesalab",
+            "info:fedora/archives:ipcc",
+            "info:fedora/archives:info",
+            "info:fedora/archives:kuettner",
+            "info:fedora/archives:lie",
+            "info:fedora/archives:wcia",
+            "info:fedora/archives:unpc",
+            "info:fedora/archives:nhre",
+            "info:fedora/archives:nsbf",
+            "info:fedora/archives:raf",
+            "info:fedora/archives:scd",
+            "info:fedora/archives:staffnotes",
+            "info:fedora/archives:twerle",
+            "info:fedora/archives:barbados",
+            "info:fedora/archives:ucarbd",
+            "info:fedora/archives:unoh",
+            "info:fedora/archives:unid",
+            "info:fedora/archives:vinlally",
+            "info:fedora/archives:wor",
+            "info:fedora/archives:wwashington",
+        ].join(' OR ');
+
+    },
+
     search: function () {
         log ("OpenSky SEARCH")
         var q = $('#query').val().trim();
         log (' - q: ' + q);
 
-        // here is example searching title field
-        // var user_query = 'mods_titleInfo_title_mt:"' + q + '"'
 
-        // simple search does not specify a field
-        var user_query = 'catch_all_fields_mt:"' + q + '"';
-
-
-        var query = user_query + ' AND PID_t:"archives*"';
-        // var query = query + ' NOT RELS_INT_embargo-expiry-notification-date_literal_ms:*';
-        // var query = query + ' NOT RELS_INT_embargo-until_literal_ms:*';
-
-
-        // query += ' NOT mods_extension_collectionKey_ms:articles NOT mods_extension_collectionKey_ms:books'
-
+        var url = "http://osstage2.ucar.edu:8080/solr/core1/select";
         // var url = this.api_baseurl + '/service/search/v1'
-        var url = this.api_baseurl + '/osws/search/v1';    // DEVEL
+        // var url = this.api_baseurl + '/osws/search/v1';    // DEVEL
         var params = {
             // q: 'mods_titleInfo_title_mt:"' + q + '"',
-            q: query,
+            q: q,
+            fq:this.makeFQ(),
+            fl: 'ds.MODS,PID,dsmd_MODS.Content-Type,fgs_ownerId_s,fgs_createdDate_dt,fgs_label_s,score',
+            sort: '',
+            defType: 'dismax',
+            wt: 'json',
             start: '0',
             rows: '10',
-            output: 'json',
         }
 
         log ('OpenSky service query: ' + url)
@@ -52,7 +80,7 @@ var OpenSkyController = Class.extend ({
             data: params,
         }).done (function (resp) {
             log ("OSWS SEARCH RESULTS returned")
-            // log (stringify(resp))
+            log (stringify(resp))
             self.render_search_results(q, resp)
         })
     },

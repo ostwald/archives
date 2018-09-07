@@ -53,7 +53,11 @@ var PARAMS;
         return params;
     };
 
-
+	if(typeof(String.prototype.trim) === "undefined") {
+		String.prototype.trim = function() {
+			return String(this).replace(/^\s+|\s+$/g, '');
+		};
+	}
 
 //    log ("$.parseParams defined");
 })(jQuery);
@@ -173,9 +177,9 @@ function getContent(path,maxElms,matchesRegex) {
 				var pathEle = path[i];
 				var str = null;
 				if(isString(pathEle))
-					str = pathEle.strip();
+					str = pathEle.trim();
 				else if(pathEle.content && isString(pathEle.content))
-					str = pathEle.content.strip();
+					str = pathEle.content.trim();
 				if(str != null && str.length > 0 && (!matchesRegex || matchesRegex.test(str))) {
 					if(maxElms && maxElms == 1)
 						value = sanitize(str);

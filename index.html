@@ -19,6 +19,7 @@
     <script src="opensky-model.js"></script>
     <script src="mods-model.js"></script>
     <script src="opensky-script.js"></script>
+    <script src="opensky-proxy-script.js"></script>
     <script src="archive-it-script.js"></script>
 
     <link rel="shortcut icon" type="image/png" href="favicon.png">
@@ -75,7 +76,8 @@
 <script>
     $(function () {
 
-        var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
+//        var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
+        var OPENSKY = new OpenSkyProxyController(OPENSKY_API, OPENSKY_UI);
         var ASPACE = new ApaceController(ASPACE_API, ASPACE_UI);
         var ARCHIVEIT = new ArchiveItController(ARCHIVE_IT_API, ARCHIVE_IT_UI);
 
@@ -104,8 +106,8 @@
 
         if (1) {
             // $('#query').val('Staff Notes Volume 43 Issue 3');
-//            $('#query').val('Atmosphere');
-            $('#query').val('tamex');
+            $('#query').val('CGD');
+//            $('#query').val('tamex');
             // $('#query').val('NCAR gets new fast computer');
             setTimeout(search, 500);
         }

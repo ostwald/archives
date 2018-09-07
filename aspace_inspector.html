@@ -43,9 +43,8 @@
         <ol id="aspace-results" class="results-list"></ol>
     </div>
     <div id="opensky-wrapper" class="repo-wrapper" style="display:none">
-        <button id="opensky-see-all-button" class="see-all-button">See all results</button>
-        <h3>Digital Collections</h3>
-        <ol id="opensky-results" class="results-list"></ol>
+        <h3>Details</h3>
+        <div id="details"></div>
     </div>
 
 </div> <!-- page-wrapper-->
@@ -72,14 +71,14 @@
 
         function search () {
             $('.see-all-button').hide();
+            $('#aspace-results')
             $('.repo-wrapper').show();
             ASPACE.getResource();
-//            OPENSKY.search();
 
         }
 
         if (1) {
-            $('#query').val('/repositories2/resources/22');
+            $('#query').val('/repositories/2/resources/22');
             setTimeout(search, 500);
         }
 

@@ -72,11 +72,34 @@ var ApaceController = Class.extend ({
             this.get_token(this._getResource)
         }
         else {
-            this._getResource()
+            this._getResource(this.showDetails)
         }
     },
 
-    _getResource: function() {
+    showDetails: function (id, data) {
+        slog(data)
+        var fields = [
+            'level', 'notes',
+        ]
+        $('#details').html($t('div')
+            .html('Level: ' + data.level))
+        $(data.notes).each(function (i, note){
+            $('#details').append($t('div')
+                .css ('font-weight','bold')
+                .html(note.label));
+            if (note.content) {
+                $('#details').append($t('pre')
+                    .html(note.content));
+            }
+            if (note.subnotes) {
+                $('#details').append($t('pre')
+                    .html(stringify(note.subnotes)))
+            }
+            // $('#details').append($t('pre').html(stringify(data[field])));
+        })
+    },
+
+    _getResource: function(callback) {
         log ("Aspace SEARCH")
         var id = $('#query').val().trim();
         // log (' - q: ' + q);
@@ -95,11 +118,20 @@ var ApaceController = Class.extend ({
             log ("ASPACE resource data returned")
             // self.render_search_results(id, resp)
             self.render_result(id, resp, $('#aspace-results'))
+            if (callback) {
+                callback (id, resp);
+            }
         })
     },
 
     render_search_results: function (q, data) {
         var $target = $('#aspace-results').html('');
+
+        if (0) {
+            log ("ASPACE Result Data")
+            slog(data);
+        }
+
 
         var results = data.results;
         var total_hits = data.total_hits;
@@ -128,6 +160,11 @@ var ApaceController = Class.extend ({
         $(results).each (function (i, result_data) {
             var result = new ASpaceSearchResult(result_data);
             // log ("- " + result.id)
+            if (0) {
+                log ("ASpaceSearchResult Json")
+                slog (result.json);
+
+            }
 
             if (result.jsonmodel_type == 'accession') {
                 log (" .. skipping accession record")
@@ -151,11 +188,11 @@ var ApaceController = Class.extend ({
                             .addClass ('ui-icon ui-icon-extlink'))))
 
             var $attrs = $t('div').addClass('result-attributes')
-            // if (result.id) {
-            //     $attrs.append($t('div')
-            //         .addClass('result-attr')
-            //         .html('id: ' + result.id))
-            // }
+            if (result.id) {
+                $attrs.append($t('div')
+                    .addClass('result-attr')
+                    .html('id: ' + result.id))
+            }
 
             if (result.level) {
                 $attrs.append($t('div')
@@ -188,7 +225,7 @@ var ApaceController = Class.extend ({
     render_result: function (i, result, $target) {
 
 
-        slog (result)
+        // slog (result)
         // slog (result.notes)
         var description = '';
         $(result.notes).each (function (i, note) {

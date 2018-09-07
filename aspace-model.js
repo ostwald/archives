@@ -27,12 +27,21 @@ var ASpaceSearchResult = Class.extend ({
         }
 
         var notes = this.json.notes;
+        // log (this.id + '  NOTES')
         // slog (notes);
 
         $(notes).each (function (j, note) {
             if (note.type == note_type || note.jsonmodel_type == note_type) {
+
+
+
                 // log ("found " + note_type)
                 var dlist = [];
+
+                if (note._inherited) {
+                    dlist.push ("INHERITED!!")
+                    log ("  --> INHERITED")
+                }
 
                 $(note.subnotes).each (function (k, sub) {
                     dlist.push (sub.content)
