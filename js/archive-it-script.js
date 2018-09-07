@@ -10,7 +10,7 @@
 	
 	search: function() {
             log ("ARchiveIt SEARCH")
-            var q = $('#edit-q').val().trim();
+            var q = $('#edit-q').val().trim().replace(' ', '+');
             // log (' - q: ' + q);
             var url = this.api_baseurl;
 	    

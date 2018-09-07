@@ -4,11 +4,6 @@ Parse and access MODS name elements and components
 
 (function ($) {
 
-    function shit (tag) {
-	tag = tag || 'div';
-	return $('<'+tag+'/>');
-    }
-    
 var ModsName = Class.extend({
     init: function (name_json) {
         this.json = name_json;

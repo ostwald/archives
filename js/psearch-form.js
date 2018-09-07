@@ -11,10 +11,12 @@
 
 	    // SUBMIT HANDLER
 	    .submit (function (event) {
+		log ("SUBMINT!");
 		//		alert ('no you dont');
 		var query = $('input#edit-q').val();
 
-		if (!query) {
+		// we will trap empty query only when no source is specified
+		if (false && !query) {
 		    alert('please enter a search term');
 		    return false;
 		}
@@ -31,6 +33,12 @@
 		    return
 		}
 
+		// empty query with "all" (i.e., no source specified)
+		if (!query) {
+		    alert('Please enter a search term');
+		    return false;
+		}
+		
 		// we have a search term and we are doing psearch
 		event.preventDefault();
 		window.location = 'psearch?query=' + query;

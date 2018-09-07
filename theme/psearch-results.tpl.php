@@ -77,7 +77,7 @@
 	    var query = $('#edit-q').val();
 
 	    if (typeof (OPENSKY_API) == 'undefined') {
-		alert ('WARNING: Configs aparently not loadedd');
+            alert ('WARNING: Configs aparently not loadedd');
 	    }
 	    
 	    var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
@@ -88,24 +88,25 @@
 	    var ARCHIVEIT = new ArchiveItController(ARCHIVE_IT_API, ARCHIVE_IT_UI);
 
 	    function search () {
-		$('.see-all-button').hide();
-		$('.repo-wrapper').show();
-		OPENSKY.search();
-		ASPACE.doSearch();
-		ARCHIVEIT.search();
+            $('.see-all-button').hide();
+            $('.repo-wrapper').show();
+            OPENSKY.search();
+            ASPACE.doSearch();
+            ARCHIVEIT.search();
 	    }
 
+        // log ("QUERY: " + query);
+        
 	    if (query) {
-		setTimeout(search, 500);
+            setTimeout(search, 500);
 	    }
-	    
 	    else if (0) {  // debugging auto query
 		
-		// $('#edit-q').val('Staff Notes Volume 43 Issue 3');
-		//	      $('#edit-q').val('Atmosphere');
-		$('#edit-q').val('tamex');
-		// $('#edit-q').val('NCAR gets new fast computer');
-		setTimeout(search, 500);
+            // $('#edit-q').val('Staff Notes Volume 43 Issue 3');
+            //	      $('#edit-q').val('Atmosphere');
+            $('#edit-q').val('tamex');
+            // $('#edit-q').val('NCAR gets new fast computer');
+            setTimeout(search, 500);
 	    }
 	});
 	

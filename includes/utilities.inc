@@ -4,10 +4,8 @@ function archive_it_proxy () {
 
 
     $query = $_GET['query'];
-    
-    // $url_live = 'https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=' . $query;
-    $url_live = BASE_ARCHIVEIT_URL . '?page=1&show=ArchivedPages&q=' . $query;
-    
+    $url_live = PSEARCH_ARCHIVE_IT_URL . '?page=1&show=ArchivedPages&q=' . $query;
+
     class ResultItem {
         
         public $title;
@@ -36,7 +34,6 @@ function archive_it_proxy () {
     }
     
     $contents = file_get_contents ($url_live);
-    
     $item_pat = '/<div class=\"result-item\">.*?<\/div>/is';
     
     preg_match_all($item_pat, $contents, $matches);
