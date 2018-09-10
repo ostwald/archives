@@ -3,13 +3,11 @@
 /* js added here in template loads before js attached to forms
    (although drupal_add_js is depreciated
 */
-// tester.js doesn't do anything (but it does load)
 
 // dpm($variables);
 $js_path = drupal_get_path('module','psearch') . '/js';
 
 drupal_add_js("$js_path/base-script-for-drupal.js", 'file');
-drupal_add_js("$js_path/tester.js", 'file');
 
 $block = module_invoke('psearch', 'block_view', 'psearch_search_form_block');
 print render($block['content']);

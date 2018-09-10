@@ -30,6 +30,11 @@ function psearch_menu() {
         'page callback' => 'aspace_proxy',
         'access callback' => TRUE
     );
+    $items['psearch/opensky'] = array(
+        'title' => 'Opensky proxy',
+        'page callback' => 'opensky_proxy',
+        'access callback' => TRUE
+    );
     return $items;
 }
 

@@ -14,8 +14,8 @@
        'aspace-model.js',
        'aspace-script.js',
        'opensky-model.js',
-       'mods-model.js',
        'opensky-script.js',
+       'opensky-proxy-script.js',
        'archive-it-script.js',
    );
 
@@ -76,11 +76,12 @@
 	    // query is the value of the search box (edit-q);
 	    var query = $('#edit-q').val();
 
-	    if (typeof (OPENSKY_API) == 'undefined') {
+	    if (typeof (OPENSKY_UI) == 'undefined') {
             alert ('WARNING: Configs aparently not loadedd');
 	    }
 	    
-	    var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
+	    // var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
+        var OPENSKY = new OpenSkyProxyController(OPENSKY_PROXY, OPENSKY_UI);
 	    
 	    // var ASPACE = new AspaceController(ASPACE_API, ASPACE_UI);
 	    var ASPACE = new ProxiedAspaceController(ASPACE_PROXY, ASPACE_UI);

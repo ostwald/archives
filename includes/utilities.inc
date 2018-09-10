@@ -2,7 +2,6 @@
 
 function archive_it_proxy () {
 
-
     $query = $_GET['query'];
     $url_live = PSEARCH_ARCHIVE_IT_URL . '?page=1&show=ArchivedPages&q=' . $query;
 
@@ -28,9 +27,7 @@ function archive_it_proxy () {
             echo "\n-" . $this->url;
             echo "\n-" . $this->archive_it_url;
             echo "\n-" . $this->description . "\n";
-            
         }
-        
     }
     
     $contents = file_get_contents ($url_live);
@@ -140,6 +137,107 @@ class AspaceProxy {
         $context  = stream_context_create($options);
 
         $contents = file_get_contents($url, false, $context);
+        $data = drupal_json_decode($contents);
+        return drupal_json_output($data);
+    }
+
+}
+
+/*
+NOTE: as with all these proxies implemented as drupal
+pages, we can't use "q" as a parameter because it means something
+special to drupal
+*/
+function opensky_proxy() {
+    $query = $_GET['query'];
+    $proxy = new OpenSkyProxy();
+    return $proxy->search($query, $fq);
+}
+
+
+class OpenSkyProxy {
+
+    public $api_baseurl = 'http://osstage2.ucar.edu:8080';
+
+    private function makeFQ() {
+
+        $archive_collections = [
+            'info:fedora/archives:asr',
+            'info:fedora/archives:srm',
+            'info:fedora/archives:amsohp',
+            'info:fedora/archives:atd',
+            'info:fedora/archives:fgge',
+            'info:fedora/archives:gate',
+            'info:fedora/archives:gtpr',
+            'info:fedora/archives:guides',
+            'info:fedora/archives:hao',
+            'info:fedora/archives:ucar',
+            'info:fedora/archives:mesalab',
+            'info:fedora/archives:ipcc',
+            'info:fedora/archives:info',
+            'info:fedora/archives:kuettner',
+            'info:fedora/archives:lie',
+            'info:fedora/archives:wcia',
+            'info:fedora/archives:unpc',
+            'info:fedora/archives:nhre',
+            'info:fedora/archives:nsbf',
+            'info:fedora/archives:raf',
+            'info:fedora/archives:scd',
+            'info:fedora/archives:staffnotes',
+            'info:fedora/archives:twerle',
+            'info:fedora/archives:barbados',
+            'info:fedora/archives:ucarbd',
+            'info:fedora/archives:unoh',
+            'info:fedora/archives:unid',
+            'info:fedora/archives:vinlally',
+            'info:fedora/archives:wor',
+            'info:fedora/archives:wwashington'
+        ];
+        
+        $clauses = array();
+
+        foreach ($archive_collections as $pid) {
+            $clauses[] = 'RELS_EXT_isMemberOfCollection_uri_ms:"' . $pid . '"';
+        }
+
+        return implode(' OR ', $clauses);        
+    }
+
+    public function search ($query) {
+        $url = "$this->api_baseurl/solr/core1/select";
+
+        $collections = $this->makeFQ();
+
+        $solr_fields = [
+            'PID',
+            'fgs_label_s',
+            'mods_abstract_mt',
+            'mods_extension_collectionKey_ms',
+            'keyDateYMD',
+            'mods_identifier_ark_mt',
+            'collectionName_ms'
+        ];
+
+//        echo "Collections: $collections\n";
+        
+        $data = array (
+            'q' => $query,
+            'fq' => $collections,
+            'sort' => '',
+            'defType' => 'dismax',
+            'wt' => 'json',
+            'start' => '0',
+            'rows' => '10',
+            'fl' => implode(',', $solr_fields),
+            'version' => '1.2'
+        );
+
+        $query_string = http_build_query($data);
+
+
+        // 	return file_get_contents($url.'?'.$query_string);
+        $contents = file_get_contents($url.'?'.$query_string);	
+
         $data = drupal_json_decode($contents);
         return drupal_json_output($data);
     }
