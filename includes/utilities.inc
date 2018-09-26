@@ -70,9 +70,7 @@ function aspace_proxy () {
 
 class AspaceProxy {
 
-    // public $api_baseurl = 'http://osws-p.ucar.edu:7089';
     public $api_baseurl = PSEARCH_ASPACE_API;
-
     public $token;
 
     public function __construct() {
@@ -82,7 +80,6 @@ class AspaceProxy {
     private function get_token () {
 
         $url = "$this->api_baseurl/users/webservice/login";
-
 
         if (0) { // DRUPAL
             $data = http_build_query (array ('password' => 'api-client'));
@@ -120,6 +117,26 @@ class AspaceProxy {
 
     public function search ($query) {
         $url = "$this->api_baseurl/repositories/2/search";
+
+	// Copied from a query sent to backend during normal ASPACE query. Only dynamic part is single insertion of $query somewhere in this mess ...
+        $aspace_query = "publish=true&page_size=10&resolve%5B%5D=repository%3Aid&resolve%5B%5D=resource%3Aid%40compact_resource&resolve%5B%5D=ancestors%3Aid%40compact_resource&resolve%5B%5D=top_container_uri_u_sstr%3Aid&facet.mincount=1&aq=%7B%22jsonmodel_type%22%3A%22advanced_query%22%2C%22query%22%3A%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22AND%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22publish%22%2C%22value%22%3Atrue%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22AND%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22pui%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22AND%22%2C%22subqueries%22%3A%5B%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22AND%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22keyword%22%2C%22value%22%3A%22$query%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%5D%7D%5D%7D%5D%7D%5D%7D%7D&filter=%7B%22jsonmodel_type%22%3A%22advanced_query%22%2C%22query%22%3A%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22AND%22%2C%22subqueries%22%3A%5B%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22subject%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22classification%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22accession%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22repository%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22resource%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22agent%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22digital_object%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%2C%7B%22jsonmodel_type%22%3A%22boolean_query%22%2C%22op%22%3A%22OR%22%2C%22subqueries%22%3A%5B%7B%22field%22%3A%22types%22%2C%22value%22%3A%22archival_object%22%2C%22type%22%3A%22text%22%2C%22negated%22%3Afalse%2C%22jsonmodel_type%22%3A%22field_query%22%7D%5D%7D%5D%7D%5D%7D%5D%7D%5D%7D%5D%7D%5D%7D%5D%7D%5D%7D%7D&facet%5B%5D=repository&facet%5B%5D=primary_type&facet%5B%5D=subjects&facet%5B%5D=published_agents&page=1";
+
+        $options = array (
+            'http' => array (
+                'method' => 'POST',
+                'content' => $aspace_query,
+                'header' => 'X-ArchivesSpace-Session: ' . $this->token,
+            )
+        );
+
+        $context  = stream_context_create($options);
+        $contents = file_get_contents($url, false, $context);
+        $data = drupal_json_decode($contents);
+        return drupal_json_output($data);
+    }
+
+    public function search_SIMPLE ($query) {
+        $url = "$this->api_baseurl/repositories/2/search";
         $data = array (
             'page' => '1',
             'q' => "notes:\"$query\" OR title:\"$query\"",
@@ -133,14 +150,12 @@ class AspaceProxy {
                 'header' => 'X-ArchivesSpace-Session: ' . $this->token,
             )
         );
-//        var_dump ($options);
-        $context  = stream_context_create($options);
 
+        $context  = stream_context_create($options);
         $contents = file_get_contents($url, false, $context);
         $data = drupal_json_decode($contents);
         return drupal_json_output($data);
     }
-
 }
 
 /*
@@ -154,13 +169,13 @@ function opensky_proxy() {
     return $proxy->search($query, $fq);
 }
 
-
 class OpenSkyProxy {
 
     public $api_baseurl = 'http://osstage2.ucar.edu:8080';
 
     private function makeFQ() {
 
+        // NOTE - this list of collections must be updated periodically!
         $archive_collections = [
             'info:fedora/archives:asr',
             'info:fedora/archives:srm',
@@ -191,7 +206,8 @@ class OpenSkyProxy {
             'info:fedora/archives:unid',
             'info:fedora/archives:vinlally',
             'info:fedora/archives:wor',
-            'info:fedora/archives:wwashington'
+            'info:fedora/archives:wwashington',
+            'info:fedora/archives:comms'
         ];
         
         $clauses = array();
@@ -218,8 +234,6 @@ class OpenSkyProxy {
             'collectionName_ms'
         ];
 
-//        echo "Collections: $collections\n";
-        
         $data = array (
             'q' => $query,
             'fq' => $collections,
@@ -233,11 +247,7 @@ class OpenSkyProxy {
         );
 
         $query_string = http_build_query($data);
-
-
-        // 	return file_get_contents($url.'?'.$query_string);
         $contents = file_get_contents($url.'?'.$query_string);	
-
         $data = drupal_json_decode($contents);
         return drupal_json_output($data);
     }
