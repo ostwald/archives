@@ -34,7 +34,7 @@ var OpenSkyProxyController = OpenSkyController.extend ( {
             var json_resp;
             try {
                 json_resp = JSON.parse(resp)
-                log('json_resp is a ' + typeof json_resp)
+                // log('json_resp is a ' + typeof json_resp)
             } catch (error) {
                 log ("PARSE ERROR: " + error)
             }
@@ -44,9 +44,9 @@ var OpenSkyProxyController = OpenSkyController.extend ( {
     },
 
     render_search_results:function (q, data) {
-        log ("PROXY: render_search_results")
+        // log ("PROXY: render_search_results")
 
-        slog (data);
+        // slog (data);
 
         var $target = $('#opensky-results').html('');
         var osws_response = new OpenSkyProxyResults(data);
@@ -97,8 +97,7 @@ var OpenSkyProxyResults = Class.extend ({
 var OpenSkyProxyResult = Class.extend({
     init: function (json_data) {
         this.data = json_data;
-        log ('OpenSkyProxyResult!!!');
-        slog(json_data);
+        // slog(json_data);
         this.pid = this.getValue(this.data.PID);
         this.title = this.getValue(this.data.fgs_label_s);
         this.description = this.getValue(this.data.mods_abstract_mt);
@@ -106,9 +105,9 @@ var OpenSkyProxyResult = Class.extend({
         this.ark = this.getValue(this.data.mods_identifier_ark_mt);
         this.collectionName = this.getValue(this.data.collectionName_ms);
 
-        log ("PID: " + this.pid);
-        log ("ark: " + this.ark);
-        log ("description: " + this.description);
+        // log ("PID: " + this.pid);
+        // log ("ark: " + this.ark);
+        // log ("description: " + this.description);
 
 
     },
