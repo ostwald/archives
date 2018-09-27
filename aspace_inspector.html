@@ -14,9 +14,7 @@
     <script src="base-script.js"></script>
 
     <script src="aspace-script.js"></script>
-    <script src="opensky-model.js"></script>
-    <script src="mods-model.js"></script>
-    <script src="opensky-script.js"></script>
+    <script src="aspace-inspector-script.js"></script>
 
     <link rel="shortcut icon" type="image/png" href="favicon.png">
 </head>
@@ -31,7 +29,8 @@
 
     <div id="search-form-wrapper">
         <form id="search-form">
-            <input type="text" id="query" value="" placeholder="e.g., Tamex" maxlength="200"/>
+            <input type="hidden" id="prefix" value="/repositories/2/" maxlength="20"/>
+            <input type="text" id="query" value="" placeholder="" maxlength="200"/>
             <button type="button" id="search-button">search</button>
         </form>
     </div>
@@ -50,10 +49,14 @@
 </div> <!-- page-wrapper-->
 </body>
 <script>
+    var ASPACE = null;
+
     $(function () {
 
-        var OPENSKY = new OpenSkyController(OPENSKY_API, OPENSKY_UI);
-        var ASPACE = new ApaceController(ASPACE_API, ASPACE_UI);
+        var ASPACE_INSPECTOR_API = 'http://osws-p.ucar.edu:7089'
+        var ASPACE_INSPECTOR_UI = 'http://aspace-t.dls.ucar.edu'
+        log ("hello world")
+        ASPACE = new AspaceInspector(ASPACE_INSPECTOR_API, ASPACE_INSPECTOR_UI);
 
 
         $('#search-button')
@@ -69,7 +72,7 @@
                     return false;
                 })
 
-        function search () {
+        function init_display () {
             $('.see-all-button').hide();
             $('#aspace-results')
             $('.repo-wrapper').show();
@@ -78,8 +81,9 @@
         }
 
         if (1) {
-            $('#query').val('/repositories/2/resources/22');
-            setTimeout(search, 500);
+//            $('#query').val('resources/22');
+            $('#query').val('archival_objects/14385');
+            setTimeout(init_display, 500);
         }
 
     })

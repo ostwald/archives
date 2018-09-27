@@ -1,10 +1,12 @@
-var ApaceController = Class.extend ({
+var AspaceController = Class.extend ({
 
     init:function (api_baseurl, ui_baseurl) {
+
         this.TOKEN = null;
         this.api_baseurl = api_baseurl;
         this.ui_baseurl = ui_baseurl;
         this.get_token()
+
     },
 
     get_token: function (callback) {
@@ -101,8 +103,8 @@ var ApaceController = Class.extend ({
 
     _getResource: function(callback) {
         log ("Aspace SEARCH")
-        var id = $('#query').val().trim();
-        // log (' - q: ' + q);
+        var id = $('#prefix').val().trim() + $('#query').val().trim();
+        log (' - id: ' + id);
         var url = this.api_baseurl + id;
 
         var self = this;
@@ -241,6 +243,7 @@ var ApaceController = Class.extend ({
             }
         })
 
+        $target.html('');
         var $result_dom = $t('li').addClass('.result')
         $result_dom
             .appendTo($target)
@@ -274,6 +277,18 @@ var ApaceController = Class.extend ({
                 .addClass('description')
                 .html(description.trimToLength(200)))
         }
+
+        if (result.ancestors.length) {
+            $result_dom.append($t('div')
+                .addClass('parent')
+                .html('parent: ' + result.ancestors[0].ref + '  (' + result.ancestors[0].level + ')')
+                .click (function () {
+                    var pat = '/repositories/2';
+                    $('#query').val(result.ancestors[0].ref.substring(pat.length));
+                    ASPACE.getResource();
+                }));
+        }
+
     }
 
 });
