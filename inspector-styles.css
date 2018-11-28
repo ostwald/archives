@@ -1,0 +1,34 @@
+h2, h3 {
+    margin:0;
+    padding:5px 0 3px;
+}
+
+ul#notes {
+    margin:0;
+    padding:0;
+    list-style-type:none;
+}
+li.note {
+    border:thin transparent solid;
+    padding: 5px 0 0 0;
+}
+.note-label {
+    color:darkblue;
+    font-weight: bold;
+}
+
+.note-type {
+    color:dimgray;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size:.65em;
+}
+
+.note-content, .subnote-content {
+    padding: 3px 0;
+    font-size:.85em;
+}
+
+.unpublished {
+    color:red;
+}

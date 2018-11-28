@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="inspector-styles.css">
 
     <script src="config.js"></script>
 
@@ -42,7 +43,7 @@
         <ol id="aspace-results" class="results-list"></ol>
     </div>
     <div id="opensky-wrapper" class="repo-wrapper" style="display:none">
-        <h3>Details</h3>
+        <h2>Details</h2>
         <div id="details"></div>
     </div>
 
@@ -51,30 +52,33 @@
 <script>
     var ASPACE = null;
 
+
+    log ('params: ');
+    slog(PARAMS)
+
     $(function () {
 
         var ASPACE_INSPECTOR_API = 'http://osws-p.ucar.edu:7089'
         var ASPACE_INSPECTOR_UI = 'http://aspace-t.dls.ucar.edu'
-        log ("hello world")
         ASPACE = new AspaceInspector(ASPACE_INSPECTOR_API, ASPACE_INSPECTOR_UI);
 
 
         $('#search-button')
             .button()
             .click(function (event) {
-                search();
+                ASPACE.getResource();
                 return false;
             })
 
         $('#search-form')
                 .submit(function (event) {
-                    search();
+                    ASPACE.getResource();
                     return false;
                 })
 
         function init_display () {
             $('.see-all-button').hide();
-            $('#aspace-results')
+//            $('#aspace-results')
             $('.repo-wrapper').show();
             ASPACE.getResource();
 
@@ -82,7 +86,10 @@
 
         if (1) {
 //            $('#query').val('resources/22');
-            $('#query').val('archival_objects/14385');
+            if (PARAMS.id)
+                $('#query').val(PARAMS.id);
+            else
+                $('#query').val('resources/72');
             setTimeout(init_display, 500);
         }
 

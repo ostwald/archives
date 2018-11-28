@@ -1,14 +1,16 @@
 
+function idFromPath (path) {
+    var pat = '/repositories/2/';
+    return path.substring(pat.length);
+}
+
 var AspaceInspector = AspaceController.extend ({
 
     init:function (api_baseurl, ui_baseurl) {
         this._super(api_baseurl, ui_baseurl)
-        log ("ApaceInspector!")
-        this.name = 'fooberry'
     },
 
     getResource: function () {
-        log ("getResource - " + this.name)
         var id = $('#prefix').val().trim() + $('#query').val().trim();
         log (' - id: ' + id);
         var self = this;
@@ -16,7 +18,6 @@ var AspaceInspector = AspaceController.extend ({
     },
 
     getObject: function (id, callback) {
-        log ("getObject - " + this.name)
         var self = this;
         if (!this.TOKEN) {
             this.get_token(self._getObject (id, callback))
@@ -27,9 +28,6 @@ var AspaceInspector = AspaceController.extend ({
     },
 
     _getObject: function(id, callback) {
-        log ("_getObject - " + this.name)
-        log (' - id: ' + id);
-        log (' - callback: ' + callback);
         var url = this.api_baseurl + id;
 
         var self = this;
@@ -60,11 +58,10 @@ var AspaceObject = Class.extend ({
 
     render: function () {
         var $target = $('#aspace-results')
-        // slog (result)
-        // slog (this.notes)
+        // slog (this.data)
         var description = '';
         $(this.notes).each (function (i, note) {
-            log (note.label)
+            // log (note.label)
             if (note.type == 'scopecontent') {
                 var dlist = [];
 
@@ -113,14 +110,15 @@ var AspaceObject = Class.extend ({
 
         if (this.ancestors.length) {
 
-            var parent_id = this.ancestors[0].ref;
+            var parent_path = this.ancestors[0].ref;
             var parent_level = this.ancestors[0].level;
             $result_dom.append($t('div')
                 .addClass('parent')
-                .html('parent: ' + parent_id + '  (' + parent_level + ')')
+                .html('parent: ' + parent_path + '  (' + parent_level + ')')
                 .click (function () {
-                    var pat = '/repositories/2';
-                    $('#query').val(parent_id.substring(pat.length));
+                    // var pat = '/repositories/2/';
+                    // $('#query').val(parent_id.substring(pat.length));
+                    $('#query').val(idFromPath(parent_path));
                     ASPACE.getResource();
                 }));
         }
@@ -130,25 +128,69 @@ var AspaceObject = Class.extend ({
     },
 
     render_details: function () {
-        var fields = [
-            'level', 'notes',
-        ]
+        // slog (this.notes)
+
         $('#details').html($t('div')
             .html('Level: ' + this.data.level))
-        $(this.data.notes).each(function (i, note){
-            $('#details').append($t('div')
-                .css ('font-weight','bold')
-                .html(note.label));
-            if (note.content) {
-                $('#details').append($t('pre')
-                    .html(note.content));
-            }
-            if (note.subnotes) {
-                $('#details').append($t('pre')
-                    .html(stringify(note.subnotes)))
-            }
-            // $('#details').append($t('pre').html(stringify(data[field])));
+            .append (this.render_notes());
+
+    },
+
+    render_notes: function () {
+        var $notes_list = $t('ul')
+            .attr ('id', 'notes')
+        var $wrapper = $t('div')
+            .html ($t('h3')
+                .html('Notes'))
+            .append ($notes_list)
+        var self = this;
+        $(this.data.notes).each(function (i, note) {
+            $notes_list.append(self.render_note(note));
         })
+        return $wrapper;
+    },
+
+    render_note: function (data) {
+        // log ("RENDER_NOTE")
+        // slog (data);
+        var $wrapper = $t('li').addClass('note')
+        if (data.jsonmodel_type == 'note_singlepart') {
+            $wrapper.append($t('div')
+                .addClass('note-label')
+                .html(data.label))
+            $(data.content).each (function (i, content) {
+                $wrapper.append($t('div')
+                    .addClass('note-content')
+                    .html (content.replace(/\n/g, '<br>')))
+            })
+
+        }
+        else if (data.jsonmodel_type == 'note_multipart') {
+            $wrapper.append($t('div')
+                .addClass('note-label')
+                .html(data.label))
+            if (data.type) {
+                $wrapper.append($t('div')
+                    .addClass('note-type')
+                    .html(data.type))
+            }
+            $(data.subnotes).each (function (i, subnote) {
+                var $subnote = $t('div')
+                    .addClass('subnote-content')
+                    .html (subnote.content.replace(/\n/g, '<br>'))
+                if (!subnote.publish)
+                    $subnote.addClass ('unpublished')
+                $wrapper.append($subnote)
+            })
+        }
+        else {  // mulit
+            $wrapper.append($t('pre')
+                .html(stringify(data)))
+        }
+
+        if (!data.publish)
+            $wrapper.addClass ('unpublished')
+        return $wrapper;
     }
 })
 
