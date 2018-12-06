@@ -1,16 +1,13 @@
+
 <?php
    /*
    load javascript and style sheets necessary to display parallel search results
-
-   variables
-   - $query - the search term
    */
 
 
    $js_path = drupal_get_path('module','psearch') . '/js';
    $css_path = drupal_get_path('module','psearch') . '/css';
    $js_files = array (
-       'config.js',
        'aspace-model.js',
        'aspace-script.js',
        'opensky-model.js',

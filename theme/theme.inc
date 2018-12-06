@@ -31,4 +31,10 @@ function template_preprocess_psearch_wrapper(&$variables) {
     }
     $variables['query'] = $query;
     // dpm ('completed template_preprocess_psearch_wrapper');
+
+    $variables['PSEARCH_ARCHIVE_IT_URL'] = PSEARCH_ARCHIVE_IT_URL;
+    $variables['PSEARCH_OPENSKY_URL'] = PSEARCH_OPENSKY_URL;
+    $variables['PSEARCH_OPENSKY_API'] = PSEARCH_OPENSKY_API;
+    $variables['PSEARCH_ASPACE_API'] = PSEARCH_ASPACE_API;
+    $variables['PSEARCH_ASPACE_URL'] = PSEARCH_ASPACE_URL;
 }

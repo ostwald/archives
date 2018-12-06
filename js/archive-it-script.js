@@ -46,7 +46,7 @@
 			       .html('No results found')
 			       .addClass('results-msg'));
             } else {
-		
+
 		var see_all_url = this.ui_baseurl + q;
 		
 		// log ("ARCHIVE_IT Search URL: " + see_all_url)

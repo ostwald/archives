@@ -3,7 +3,7 @@
 function archive_it_proxy () {
 
     $query = $_GET['query'];
-    $url_live = PSEARCH_ARCHIVE_IT_URL . '?page=1&show=ArchivedPages&q=' . $query;
+    $url_live = PSEARCH_ARCHIVE_IT_URL . $query;
 
     class ResultItem {
         
@@ -171,7 +171,8 @@ function opensky_proxy() {
 
 class OpenSkyProxy {
 
-    public $api_baseurl = 'http://osstage2.ucar.edu:8080';
+    // public $api_baseurl = 'http://osstage2.ucar.edu:8080';
+    public $api_baseurl = PSEARCH_OPENSKY_API;
 
     private function makeFQ() {
 
@@ -231,7 +232,8 @@ class OpenSkyProxy {
             'mods_extension_collectionKey_ms',
             'keyDateYMD',
             'mods_identifier_ark_mt',
-            'collectionName_ms'
+            'collectionName_ms',
+            'RELS_EXT_isMemberOfCollection_uri_ms',
         ];
 
         $data = array (

@@ -102,6 +102,8 @@
 	},
 	
 	render_search_results: function (q, data) {
+
+	    // log ('ASpace show render_search_results - this.ui_baseurl: ' + this.ui_baseurl);
             var $target = $('#aspace-results').html('');
 	    
             var results = data.results;
@@ -118,7 +120,7 @@
 		
 		var see_all_url = this.ui_baseurl + '/search?op%5B%5D=&q%5B%5D=' + q;
 		
-		// log ("ASSPACE See all URL: " + see_all_url)
+		log ("ASSPACE See all URL: " + see_all_url)
 		$('#aspace-see-all-button')
 		
                     .click (function (event) {
@@ -278,7 +280,7 @@
 		    slog (settings);
 		},
 		success: function (resp) {
-		    log ("ASPACE proxy SEARCH RESULTS returned)");
+		    log ("ASPACE proxy SEARCH RESULTS returned");
 		    log (resp);
 		    self.render_search_results(q, resp);
 		}

@@ -10,7 +10,7 @@ parallel search prototype for Archives
 
 on webpub test the location is /cmstest/test7.archives.cms/sites/default/modules/custom
 
-## rename “archives” dir to “psearch”
+## Rename “archives” dir to “psearch”
 check permissions: directories must have o+x and files o+r
 
 ## Enable Parallel Search module

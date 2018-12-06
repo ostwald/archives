@@ -1,10 +1,17 @@
 <?php
 
-define('PSEARCH_ARCHIVE_IT_URL', 'https://www.archive-it.org/collections/3544');
-define('PSEARCH_OPENSKY_URL', 'https://osstage2test.ucar.edu/islandora');
-define('PSEARCH_ASPACE_HOST','http://osws-p.ucar.edu');
-define('PSEARCH_ASPACE_API', PSEARCH_ASPACE_HOST . ':7089');
-define('PSEARCH_ASPACE_URL','http://osws-p.ucar.edu:7081/search');
+// ARCHiVE-iT
+define('PSEARCH_ARCHIVE_IT_URL', 'https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=');
+
+// OpenSky
+define('PSEARCH_OPENSKY_URL', 'https://opensky.ucar.edu/islandora');
+define ('PSEARCH_OPENSKY_API', 'http://osstage2.ucar.edu:8080');
+// OSWS_API not used
+define ('PSEARCH_OSWS_API', 'https://osws.ucar.edu/service/search/v1');
+
+// ASpace
+define('PSEARCH_ASPACE_API', 'http://aspace-p.ucar.edu:7089');
+define('PSEARCH_ASPACE_URL','https://aspace.archives.ucar.edu');
 
 require_once dirname(__FILE__) . '/includes/utilities.inc';
 
@@ -205,7 +212,8 @@ function psearch_search_form_submit($form, &$form_state) {
     
     if ($scope == '1') {
 
-        $aspace_url = PSEARCH_ASPACE_URL . "?op%5B%5D=&q%5B%5D=$query";
+        //$aspace_url = PSEARCH_ASPACE_URL . "?op%5B%5D=&q%5B%5D=$query";
+        $aspace_url = PSEARCH_ASPACE_URL . "/search?op%5B%5D=&q%5B%5D=$query";
 
         if (1) {
             // redirect with single string
@@ -238,7 +246,7 @@ function psearch_search_form_submit($form, &$form_state) {
     if ($scope == '3') { // archiveit
         // https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=tamex
 
-        $archiveit_url = PSEARCH_ARCHIVE_IT_URL . '?page=1&show=ArchivedPages&q=' . $query;
+        $archiveit_url = PSEARCH_ARCHIVE_IT_URL . $query;
         $form_state['redirect'] = $archiveit_url;
         return;
     }

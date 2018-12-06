@@ -61,7 +61,7 @@
 	get_opensky_query: function (q) {
             // https://opensky.ucar.edu/islandora/search/warren%20washington?type=dismax&collection=opensky%3Aarchives
 
-            var os_query =  this.ui_baseurl + '/islandora/search/' + encodeURIComponent(q) + '?type=dismax&collection=opensky%3Aarchives';
+            var os_query =  this.ui_baseurl + '/search/' + encodeURIComponent(q) + '?type=dismax&collection=opensky%3Aarchives';
             var splits = os_query.split('%22');
             if (splits.length > 2) {
 		os_query = splits[0] + '%28' + splits[1] + '%29' + splits[2];
