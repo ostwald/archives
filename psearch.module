@@ -1,22 +1,10 @@
 <?php
 
-// ARCHiVE-iT
-define('PSEARCH_ARCHIVE_IT_URL', 'https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=');
-
-// OpenSky
-define('PSEARCH_OPENSKY_URL', 'https://opensky.ucar.edu/islandora');
-define ('PSEARCH_OPENSKY_API', 'http://osstage2.ucar.edu:8080');
-// OSWS_API not used
-define ('PSEARCH_OSWS_API', 'https://osws.ucar.edu/service/search/v1');
-
-// ASpace
-define('PSEARCH_ASPACE_API', 'http://aspace-p.ucar.edu:7089');
-define('PSEARCH_ASPACE_URL','https://aspace.archives.ucar.edu');
-
+require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/includes/utilities.inc';
 
-/**                                                                                                        
- * Implements hook_init().                                                                                 
+/**
+ * Implements hook_init().
  */
 function psearch_init() {
     drupal_add_css(drupal_get_path('module', 'psearch') . '/css/psearch-form.css');
@@ -133,8 +121,8 @@ function get_psearch_results() {
     //return 'oh no you dont';
 }
 
-/**                                                                                                        
- * Form constructor for NLDR Search                                                                        
+/**
+ * Form constructor for NLDR Search
  */
 function psearch_search_form($form_state, $delta) {
 

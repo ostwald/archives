@@ -1,0 +1,23 @@
+<?php
+
+/*
+  This is a sample config file for the psearch module. 
+
+  Copy this file as "config.php" and modify as required for a particular deployment.
+
+  Do not commit the actual configuration to git (only this sample file)
+*/
+
+// ARCHiVE-iT
+define('PSEARCH_ARCHIVE_IT_URL', 'https://www.archive-it.org/collections/3544?page=1&show=ArchivedPages&q=');
+
+// OpenSky
+define('PSEARCH_OPENSKY_URL', 'https://osstage2test.ucar.edu/islandora');
+define ('PSEARCH_OPENSKY_API', 'http://osstage2test.ucar.edu:8080');define('PSEARCH_ASPACE_API', 'http://aspace-t.dls.ucar.edu:7089');
+define('PSEARCH_ASPACE_URL','https://aspace-t.dls.ucar.edu');
+// OSWS_API not used
+define ('PSEARCH_OSWS_API', 'https://osws.ucar.edu/service/search/v1');
+
+// ASpace
+define('PSEARCH_ASPACE_API', 'http://aspace-p.ucar.edu:7089');
+define('PSEARCH_ASPACE_URL','https://aspace.archives.ucar.edu');
