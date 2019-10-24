@@ -177,39 +177,40 @@ class OpenSkyProxy {
     private function makeFQ() {
 
         // NOTE - this list of collections must be updated periodically!
-        $archive_collections = [
-            'info:fedora/archives:asr',
-            'info:fedora/archives:srm',
-            'info:fedora/archives:amsohp',
-            'info:fedora/archives:atd',
-            'info:fedora/archives:fgge',
-            'info:fedora/archives:gate',
-            'info:fedora/archives:gtpr',
-            'info:fedora/archives:guides',
-            'info:fedora/archives:hao',
-            'info:fedora/archives:ucar',
-            'info:fedora/archives:mesalab',
-            'info:fedora/archives:ipcc',
-            'info:fedora/archives:info',
-            'info:fedora/archives:kuettner',
-            'info:fedora/archives:lie',
-            'info:fedora/archives:wcia',
-            'info:fedora/archives:unpc',
-            'info:fedora/archives:nhre',
-            'info:fedora/archives:nsbf',
-            'info:fedora/archives:raf',
-            'info:fedora/archives:scd',
-            'info:fedora/archives:staffnotes',
-            'info:fedora/archives:twerle',
-            'info:fedora/archives:barbados',
-            'info:fedora/archives:ucarbd',
-            'info:fedora/archives:unoh',
-            'info:fedora/archives:unid',
-            'info:fedora/archives:vinlally',
-            'info:fedora/archives:wor',
-            'info:fedora/archives:wwashington',
-            'info:fedora/archives:comms'
-        ];
+       $archive_collections = [
+			       'info:fedora/archives:amsohp',
+			       'info:fedora/archives:asr',
+			       'info:fedora/archives:atd',
+			       'info:fedora/archives:barbados',
+			       'info:fedora/archives:comms',
+			       'info:fedora/archives:fgge',
+			       'info:fedora/archives:gate',
+			       'info:fedora/archives:gtpr',
+			       'info:fedora/archives:guides',
+			       'info:fedora/archives:hao',
+			       'info:fedora/archives:info',
+			       'info:fedora/archives:ipcc',
+			       'info:fedora/archives:kuettner',
+			       'info:fedora/archives:lie',
+			       'info:fedora/archives:mesalab',
+			       'info:fedora/archives:nhre',
+			       'info:fedora/archives:nsbf',
+			       'info:fedora/archives:raf',
+			       'info:fedora/archives:ral',
+			       'info:fedora/archives:scd',
+			       'info:fedora/archives:srm',
+			       'info:fedora/archives:staffnotes',
+			       'info:fedora/archives:twerle',
+			       'info:fedora/archives:ucar',
+			       'info:fedora/archives:ucarbd',
+			       'info:fedora/archives:unid',
+			       'info:fedora/archives:unoh',
+			       'info:fedora/archives:unpc',
+			       'info:fedora/archives:vinlally',
+			       'info:fedora/archives:wcia',
+			       'info:fedora/archives:wor',
+			       'info:fedora/archives:wwashington',
+			       ];
         
         $clauses = array();
 
@@ -237,18 +238,23 @@ class OpenSkyProxy {
         ];
 
         $data = array (
-            'q' => $query,
-            'fq' => $collections,
-            'sort' => '',
-            'defType' => 'dismax',
-            'wt' => 'json',
-            'start' => '0',
-            'rows' => '10',
-            'fl' => implode(',', $solr_fields),
-            'version' => '1.2'
-        );
+		       'q' => $query,
+		       'fq' => $collections,
+		       'sort' => '',
+		       'defType' => 'dismax',
+		       'wt' => 'json',
+		       'start' => '0',
+		       'rows' => '10',
+		       'fl' => implode(',', $solr_fields),
+		       'version' => '1.2',
+		       'qf' => 'mods_titleInfo_title_mt^50 dc.subject^3 dc.description^3 dc.creator^30 dc.contributor^20 dc.type^1 dc.relation^1 dc.publisher^1  dc.identifier^3',
+		       );
 
         $query_string = http_build_query($data);
+
+        # add second fq param. didn't work to use array above because it gave us fq[0] & fq[1], whereas we want to plain old fq's ....
+        $query_string .= '&fq=-RELS_EXT_isConstituentOf_uri_mt:*';
+
         $contents = file_get_contents($url.'?'.$query_string);	
         $data = drupal_json_decode($contents);
         return drupal_json_output($data);
